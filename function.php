@@ -15,4 +15,17 @@
 			printf("Errormessage: %s\n", $mysqli_link->error);
 		}
 	}
+	
+	function getIconName($throwed_name){
+		$iconName = '';
+		switch ($throwed_name) {
+			case "Utama":
+				$iconName = 'dashboard';
+				break;
+			case "Utility":
+				$iconName = 'wrench';
+				break;
+		}
+		return $iconName;
+	}
 ?>
