@@ -1,6 +1,5 @@
 <?php
-	if (isset($_SESSION["login"])) unset($_SESSION['login']);
-	
+	if (isset($_SESSION["login"])) header("Location: logout.php");
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +66,5 @@
     <script src="plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
     <!-- Bootstrap 3.3.2 JS -->
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <!-- iCheck -->
-    <script src="plugins/iCheck/icheck.min.js" type="text/javascript"></script>
   </body>
 </html>

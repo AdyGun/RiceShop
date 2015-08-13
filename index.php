@@ -1,8 +1,8 @@
 <?php include('header.php'); ?>
 
-	<!-- Content Wrapper. Contains page content -->
+	<!---------------------- Content Wrapper. Contains page content ---------------------->
 	<div class="content-wrapper">
-		<!-- Content Header (Page header) -->
+		<!---------------------- Content Header (Page header) ---------------------->
 		<section class="content-header">
 			<h1>
 				Dashboard
@@ -12,12 +12,12 @@
 				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 				<li class="active">Dashboard</li>
 			</ol>
-		</section>
-
-		<!-- Main content -->
+		</section><!-- /.content-header -->
+		
+		<!---------------------- Main content ---------------------->
 		<section class="content">
 			HELLO WORLD
-		</section><!-- /.content -->
+		</section><!--- /.main-content -->
 	</div><!-- /.content-wrapper -->
 	
 <?php include('footer.php'); ?>
