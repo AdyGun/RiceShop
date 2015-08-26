@@ -1,11 +1,178 @@
 <?php include('header.php'); ?>
 
-	<script type="text/javascript">
+	<script type="text/javascript">		
+		function submitAjaxForm(){
+			console.log('Submit Function.');
+			$.ajax({                                      
+				url: 'ajax/module_submitForm.php',                  
+				type: 'post',
+				data: $('#box_module_form form').serialize(),
+				dataType: 'json',         
+				beforeSend: function(){
+					helper.showBoxLoading('#box_module_form');
+				},
+				success: function(result){		
+					console.log(result);
+					helper.removeBoxLoading('#box_module_form');
+					helper.showAlertMessage(result.alert);
+					if (result.type){
+						console.log('sukses coi');
+						doCommand('cancel');
+						refreshModuleListTable($('#hidsearch').val(), $('#hidcurrentpage').val());
+					}
+				}
+			});			
+		}
+		function doCommand(command){
+			console.log('Do '+command+' function.');
+			if (command == 'cancel'){
+				//remove all validation message
+				$('#box_module_form form').clearForm();
+				$('#box_module_form form #module_issub_no').prop('checked', true);
+				$('.box-footer input[type="hidden"]').val('');
+				$('#btncreate').removeClass('hide');
+				$('#btnupdate').addClass('hide');
+				$('#btndelete').addClass('hide');
+			}
+			else{				
+				if (command == 'delete'){
+					if (!confirm("Apakah anda yakin untuk menghapus data ini?")) 
+						return false;
+				}
+				$('#hidcommand').val(command);
+				submitAjaxForm();
+			}
+		}
+		function refreshModuleListTable(contSearch, contPage){
+			console.log('Refresh Module list table');
+			$.ajax({
+				url: 'ajax/module_getModuleListTable.php',
+				type: 'post',
+				data: {
+					page: contPage,
+					search: contSearch
+				},
+				dataType: 'json',
+				beforeSend: function(){
+					helper.showBoxLoading('#box_module_list');
+				},
+				success: function(result)      
+				{
+					helper.removeBoxLoading('#box_module_list');
+					$('#hidsearch').val(contSearch);
+					$('#hidcurrentpage').val(contPage);
+					$('#module_list_table tbody tr').remove();
+					if (!result.type){
+						helper.showAlertMessage(result.alert);
+						$('#module_list_table tbody').append('<tr><td colspan="7">Module tidak ditemukan</td></tr>');
+					}
+					else{
+						/* Table Data */
+						var tabledata = result.data.tabledata;
+						for (var i=0; i<result.data.tabledata.length; i++){
+							var tabContent = '<tr mx-id="'+tabledata[i].module_id+'">';
+							tabContent += '<td>'+tabledata[i].module_id+'</td>';
+							tabContent += '<td>'+tabledata[i].module_name+'</td>';
+							tabContent += '<td>'+tabledata[i].category+'</td>';
+							tabContent += '<td>'+tabledata[i].description+'</td>';
+							tabContent += '<td>'+tabledata[i].pageurl+'</td>';
+							tabContent += '<td>'+tabledata[i].issub+'</td>';
+							tabContent += '<td>';
+							tabContent += 	'<div class="btn-group">';
+							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+							tabContent += 			'<span class="caret"></span>';
+							tabContent += 		'</button>';
+							tabContent += 		'<ul class="dropdown-menu">';
+							tabContent += 			'<li class="bg-success"><a href="javascript:void(0)" mx-command="edit">Ubah</a></li>';
+							tabContent += 			'<li class="bg-danger"><a href="javascript:void(0)" mx-command="delete">Hapus</a></li>';
+							tabContent += 		'</ul>';
+							tabContent += 	'</div>';
+							tabContent += '</td>';
+							tabContent += '</tr>';
+							$('#module_list_table tbody').append(tabContent);
+						}
+						$('#module_list_table tbody a[mx-command]').click(function(){
+							fillTextField($(this).parents('tr').attr('mx-id'),$(this).attr('mx-command'));
+						});
+						/* Table Paging */
+						var totalpage = result.data.totalpage;
+						$('#module_list_paging').html(helper.createPaginationBar(contPage, totalpage));
+						$('#module_list_paging .pagination li:not(.active,.disabled,[mx-disabled]) a').click(function(e){
+							e.preventDefault();
+							refreshModuleListTable($('#module_search').val(), $(this).attr('mx-page'));
+						});
+					}
+				}
+			});
+		}
+		function fillTextField(content,command){
+			$.ajax({
+				url: 'ajax/global_getTableData.php',
+				type: 'post',
+				data: {
+					id: content,
+					table: 'tmodule',
+					field: 'module_id'
+				},        
+				dataType: 'json',         
+				beforeSend: function(){
+					helper.showBoxLoading('#box_module_form');
+				},
+				success: function(result){
+					helper.removeBoxLoading('#box_module_form');
+					if (!result.type){
+						helper.showAlertMessage(result.alert);
+					}
+					else
+					{
+						$('#btncreate').addClass('hide');
+						// Remove all validation message
+						if (command == 'edit'){
+							$('#btnupdate').removeClass('hide');
+							$('#btndelete').addClass('hide');
+						}
+						else if (command == 'delete'){
+							$('#btndelete').removeClass('hide');
+							$('#btnupdate').addClass('hide');
+						}
+						$('#hidid').val(result.data[0]);
+						$('#module_name').val(result.data[1]);
+						$('#hidname').val(result.data[1]);
+						$('#module_category').val(result.data[2]);
+						$('#module_description').val(result.data[3]);
+						$('#module_pageurl').val(result.data[4]);
+						$('#hidpageurl').val(result.data[4]);
+						if (result.data[5] == '1')
+							$('#module_issub_yes').prop('checked', true);
+						else
+							$('#module_issub_no').prop('checked', true);
+						// do Validation
+						// cekFieldKembar("cgroupname","Module Name",4,"tmodule","module_name",data[1],"no");
+						// cekFieldMin("cgroupcategory","Category",4);
+						// cekFieldKembar("cgrouppageurl","PageURL",6,"tmodule","module_pageurl",data[4],"no");
+					}		
+				}
+			});
+		}
 		$(document).ready(function(){
-			$("#example1").DataTable();
+			refreshModuleListTable($('#module_search').val(), 1);
+			$('#box_module_form .box-footer button[mx-command]').click(function(e){
+				e.preventDefault();
+				doCommand($(this).attr('mx-command'));
+			});
+			$('#module_search').keypress(function(e){
+				if(e.which == 13) {
+					e.preventDefault();
+					refreshModuleListTable($(this).val(), 1);
+				}
+			});
+			$('#module_search_btn').click(function(e){
+				e.preventDefault();
+				refreshModuleListTable($(this).val(), 1);
+			});
 		});
 	</script>
-
+	
 	<!---------------------- Content Wrapper. Contains page content ---------------------->
 	<div class="content-wrapper">
 		<!---------------------- Content Header (Page header) ---------------------->
@@ -23,485 +190,124 @@
 		
 		<!---------------------- Main content ---------------------->
 		<section class="content">
+			<div id="content_alert">
+				
+			</div>
 			<!-- CREATE NEW MODULE -->
-			<div class="box box-primary collapsed-box">
+			<div class="box box-primary" id="box_module_form">
 				<div class="box-header with-border">
 					<h3 class="box-title">Tambah Module Baru</h3>
 					<div class="box-tools pull-right">
-						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
 				</div><!-- /.box-header -->
-				<form role="form">
+				<form class="form-horizontal">
 					<div class="box-body">
 						<div class="row">
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label for="module_name">Module Name</label>
-									<input type="text" class="form-control" id="module_name" name="module[name]">
+									<label for="module_name" class="col-sm-4 control-label">Module Name :</label>
+									<div class="col-sm-6">
+										<input type="text" class="form-control" id="module_name" name="module[name]">
+									</div>
 								</div>
 								<div class="form-group">
-									<label for="module_category">Module Category</label>
-									<input type="text" class="form-control" id="module_category" name="module[category]">
+									<label for="module_category" class="col-sm-4 control-label">Module Category :</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="module_category" name="module[category]">
+									</div>
 								</div>
 								<div class="form-group">
-									<label for="module_pageurl">Module PageURL</label>
-									<input type="text" class="form-control" id="module_pageurl" name="module[pageurl]">
+									<label for="module_pageurl" class="col-sm-4 control-label">Module PageURL :</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control" id="module_pageurl" name="module[pageurl]">
+									</div>
 								</div>
 							</div>
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label>Module Description</label>
-									<textarea class="form-control" rows="3" id="module_description" name="module[description]"></textarea>
+									<label class="col-sm-4 control-label">Module Description :</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" rows="3" id="module_description" name="module[description]"></textarea>
+									</div>
 								</div>
 								<div class="form-group">
-									<label>Is sub?</label>
-									<div class="radio">
-										<label>
-											<input type="radio" name="module[issub]" id="module_issub_no" value="no" checked />
-											No
-										</label>
-									</div>
-									<div class="radio">
-										<label>
-											<input type="radio" name="module[issub]" id="module_issub_yes" value="yes" />
-											Yes
-										</label>
+									<label class="col-sm-4 control-label">Is sub?</label>
+									<div class="col-sm-8">
+										<div class="radio">
+											<label>
+												<input type="radio" name="module[issub]" id="module_issub_no" value="0" checked />
+												No
+											</label>
+										</div>
+										<div class="radio">
+											<label>
+												<input type="radio" name="module[issub]" id="module_issub_yes" value="1" />
+												Yes
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
-						<button type="submit" class="btn btn-primary">Tambah Baru</button>
-						<button type="clear" class="btn btn-default">Batal</button>
+						<button type="submit" mx-command="create" id="btncreate" class="btn btn-primary">Tambah Baru</button>
+						<button type="submit" mx-command="update" id="btnupdate" class="btn btn-success hide">Ubah</button>
+						<button type="submit" mx-command="delete" id="btndelete" class="btn btn-danger hide">Hapus</button>
+						<button type="clear" mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
+						<input type="hidden" id="hidcommand" name="hidden[command]">
+						<input type="hidden" id="hidid" name="hidden[id]">
+						<input type="hidden" id="hidname" name="hidden[name]">
+						<input type="hidden" id="hidpageurl" name="hidden[pageurl]">
 					</div>
 				</form>
 			</div><!-- /.create-new-module -->
 			<!-- MODULE LIST -->
-			<div class="box box-info">
+			<div class="box box-info box-solid" id="box_module_list">
 				<div class="box-header with-border">
 					<h3 class="box-title">Daftar Module</h3>
 					<div class="box-tools pull-right">
-						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
 				</div><!-- /.box-header -->
 				<div class="box-body">
-					<table id="example1" class="table table-bordered table-striped">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Search</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<input type="text" id="module_search" class="form-control" />
+									<input type="hidden" id="hidsearch">
+									<input type="hidden" id="hidcurrentpage">
+									<span class="input-group-btn">
+										<span class="input-group-btn">
+                      <button class="btn btn-info" type="button" id="module_search_btn"><i class="fa fa-search"></i></button>
+                    </span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<table id="module_list_table" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>Rendering engine</th>
-								<th>Browser</th>
-								<th>Platform(s)</th>
-								<th>Engine version</th>
-								<th>CSS grade</th>
+								<th>Module ID</th>
+								<th>Module Name</th>
+								<th>Category</th>
+								<th>Description</th>
+								<th>PageURL</th>
+								<th>Is Sub?</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Trident</td>
-								<td>Internet
-									Explorer 4.0</td>
-								<td>Win 95+</td>
-								<td> 4</td>
-								<td>X</td>
-							</tr>
-							<tr>
-								<td>Trident</td>
-								<td>Internet
-									Explorer 5.0</td>
-								<td>Win 95+</td>
-								<td>5</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Trident</td>
-								<td>Internet
-									Explorer 5.5</td>
-								<td>Win 95+</td>
-								<td>5.5</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Trident</td>
-								<td>Internet
-									Explorer 6</td>
-								<td>Win 98+</td>
-								<td>6</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Trident</td>
-								<td>Internet Explorer 7</td>
-								<td>Win XP SP2+</td>
-								<td>7</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Trident</td>
-								<td>AOL browser (AOL desktop)</td>
-								<td>Win XP</td>
-								<td>6</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Firefox 1.0</td>
-								<td>Win 98+ / OSX.2+</td>
-								<td>1.7</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Firefox 1.5</td>
-								<td>Win 98+ / OSX.2+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Firefox 2.0</td>
-								<td>Win 98+ / OSX.2+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Firefox 3.0</td>
-								<td>Win 2k+ / OSX.3+</td>
-								<td>1.9</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Camino 1.0</td>
-								<td>OSX.2+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Camino 1.5</td>
-								<td>OSX.3+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Netscape 7.2</td>
-								<td>Win 95+ / Mac OS 8.6-9.2</td>
-								<td>1.7</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Netscape Browser 8</td>
-								<td>Win 98SE+</td>
-								<td>1.7</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Netscape Navigator 9</td>
-								<td>Win 98+ / OSX.2+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.0</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.1</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.1</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.2</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.2</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.3</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.3</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.4</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.4</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.5</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.5</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.6</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>1.6</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.7</td>
-								<td>Win 98+ / OSX.1+</td>
-								<td>1.7</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Mozilla 1.8</td>
-								<td>Win 98+ / OSX.1+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Seamonkey 1.1</td>
-								<td>Win 98+ / OSX.2+</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Gecko</td>
-								<td>Epiphany 2.20</td>
-								<td>Gnome</td>
-								<td>1.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>Safari 1.2</td>
-								<td>OSX.3</td>
-								<td>125.5</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>Safari 1.3</td>
-								<td>OSX.3</td>
-								<td>312.8</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>Safari 2.0</td>
-								<td>OSX.4+</td>
-								<td>419.3</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>Safari 3.0</td>
-								<td>OSX.4+</td>
-								<td>522.1</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>OmniWeb 5.5</td>
-								<td>OSX.4+</td>
-								<td>420</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>iPod Touch / iPhone</td>
-								<td>iPod</td>
-								<td>420.1</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Webkit</td>
-								<td>S60</td>
-								<td>S60</td>
-								<td>413</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 7.0</td>
-								<td>Win 95+ / OSX.1+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 7.5</td>
-								<td>Win 95+ / OSX.2+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 8.0</td>
-								<td>Win 95+ / OSX.2+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 8.5</td>
-								<td>Win 95+ / OSX.2+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 9.0</td>
-								<td>Win 95+ / OSX.3+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 9.2</td>
-								<td>Win 88+ / OSX.3+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera 9.5</td>
-								<td>Win 88+ / OSX.3+</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Opera for Wii</td>
-								<td>Wii</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Nokia N800</td>
-								<td>N800</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Presto</td>
-								<td>Nintendo DS browser</td>
-								<td>Nintendo DS</td>
-								<td>8.5</td>
-								<td>C/A<sup>1</sup></td>
-							</tr>
-							<tr>
-								<td>KHTML</td>
-								<td>Konqureror 3.1</td>
-								<td>KDE 3.1</td>
-								<td>3.1</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>KHTML</td>
-								<td>Konqureror 3.3</td>
-								<td>KDE 3.3</td>
-								<td>3.3</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>KHTML</td>
-								<td>Konqureror 3.5</td>
-								<td>KDE 3.5</td>
-								<td>3.5</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Tasman</td>
-								<td>Internet Explorer 4.5</td>
-								<td>Mac OS 8-9</td>
-								<td>-</td>
-								<td>X</td>
-							</tr>
-							<tr>
-								<td>Tasman</td>
-								<td>Internet Explorer 5.1</td>
-								<td>Mac OS 7.6-9</td>
-								<td>1</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Tasman</td>
-								<td>Internet Explorer 5.2</td>
-								<td>Mac OS 8-X</td>
-								<td>1</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>NetFront 3.1</td>
-								<td>Embedded devices</td>
-								<td>-</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>NetFront 3.4</td>
-								<td>Embedded devices</td>
-								<td>-</td>
-								<td>A</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>Dillo 0.8</td>
-								<td>Embedded devices</td>
-								<td>-</td>
-								<td>X</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>Links</td>
-								<td>Text only</td>
-								<td>-</td>
-								<td>X</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>Lynx</td>
-								<td>Text only</td>
-								<td>-</td>
-								<td>X</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>IE Mobile</td>
-								<td>Windows Mobile 6</td>
-								<td>-</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Misc</td>
-								<td>PSP browser</td>
-								<td>PSP</td>
-								<td>-</td>
-								<td>C</td>
-							</tr>
-							<tr>
-								<td>Other browsers</td>
-								<td>All others</td>
-								<td>-</td>
-								<td>-</td>
-								<td>U</td>
-							</tr>
+							<!-- Table List -->
 						</tbody>
 					</table>
+					<div id="module_list_paging" class="text-center">
+						<!-- Pagination Bar -->
+					</div>
 				</div>
 			</div><!-- /.create-new-module -->
 		</section><!--- /.main-content -->

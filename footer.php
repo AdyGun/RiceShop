@@ -35,9 +35,10 @@
     <script src="plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <!-- <script src="dist/js/pages/dashboard.js" type="text/javascript"></script> -->
-    <!-- AdminLTE for demo purposes -->
-    <!-- <script src="dist/js/demo.js" type="text/javascript"></script> -->
+		<!-- Bootstrap Validator -->
+    <script src="plugins/bootstrap-validator/validator.js" type="text/javascript"></script>
+		<!-- MyScript Helper -->
+    <script src="myscript/helper.js" type="text/javascript"></script>
+    <script src="myscript/jquery.hack.js" type="text/javascript"></script>
   </body>
 </html>
