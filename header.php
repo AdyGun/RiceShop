@@ -141,12 +141,12 @@
 						<?php
 							$login = $_SESSION["login"]['user_id'];
 							$query = "SELECT l.level_id, m.*
-										FROM tlevel_access l
-										INNER JOIN tmodule m ON l.module_id=m.module_id
-										INNER JOIN tuser u ON u.level_id=l.level_id		
-										WHERE u.user_id = '$login' AND module_issub = 0
-										ORDER BY m.module_category, m.module_name
-									 ";
+												FROM tlevel_access l
+												INNER JOIN tmodule m ON l.module_id=m.module_id
+												INNER JOIN tuser u ON u.level_id=l.level_id		
+												WHERE u.user_id = '$login' AND module_issub = 0
+												ORDER BY m.module_category, m.module_name
+											 ";
 							if ($result = $mysqli->query($query)){
 								if ($result->num_rows > 0){	
 									$tcategory = "";

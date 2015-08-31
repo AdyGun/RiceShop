@@ -25,7 +25,7 @@
     <script src="plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="plugins/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
     <!-- daterangepicker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js" type="text/javascript"></script>
+    <script src="plugins/moment/moment.min.js" type="text/javascript"></script>
     <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <!-- datepicker -->
     <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
@@ -36,9 +36,10 @@
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
 		<!-- Bootstrap Validator -->
-    <script src="plugins/bootstrap-validator/validator.js" type="text/javascript"></script>
+    <!-- <script src="plugins/bootstrap-validator/validator.js" type="text/javascript"></script> -->
 		<!-- MyScript Helper -->
     <script src="myscript/helper.js" type="text/javascript"></script>
     <script src="myscript/jquery.hack.js" type="text/javascript"></script>
+    <script src="myscript/validator.js" type="text/javascript"></script>
   </body>
 </html>

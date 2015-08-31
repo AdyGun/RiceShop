@@ -5,7 +5,7 @@
  *
  * @Author  AdyGun
  * @Email   <adygun91@gmail.com>
- * @version 0.0.1
+ * @version 0.0.4
  */
 
 var helper = new function(){
@@ -46,33 +46,33 @@ var helper = new function(){
 		if (pageTo > totalPage - 1) { pageTo = totalPage - 1 };
 			// Left Bar
 		flagDisable = (currentPage == 1) ? 'disabled' : '';
-		contentHTML += '<li class="'+flagDisable+'"><a href="javascript:void(0)" mx-page="'+(currentPage-1)+'">&laquo;</a></li>';
+		contentHTML += '<li class="'+flagDisable+'"><a href="javascript:void(0)" data-mx-page="'+(currentPage-1)+'">&laquo;</a></li>';
 		flagActive = (currentPage == 1) ? 'active' : '';
-		contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" mx-page="'+1+'">1</a></li>';
+		contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" data-mx-page="'+1+'">1</a></li>';
 		if (pageFrom - 1 == 2){
-			contentHTML += '<li><a href="javascript:void(0)" mx-page="'+2+'">2</a></li>';
+			contentHTML += '<li><a href="javascript:void(0)" data-mx-page="'+2+'">2</a></li>';
 		}
 		else if(pageFrom - 1 != 1){
-			contentHTML += '<li mx-disabled><a href="javascript:void(0)">...</a></li>';
+			contentHTML += '<li data-mx-disabled><a href="javascript:void(0)">...</a></li>';
 		}		
 			// Mid Bar
 		for (var i = pageFrom; i <= pageTo; i++){
 			flagActive = (currentPage == i) ? 'active' : '';
-			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" mx-page="'+i+'">'+i+'</a></li>';
+			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" data-mx-page="'+i+'">'+i+'</a></li>';
 		}
 			// Right Bar
 		if (pageTo + 1 == totalPage - 1){
-			contentHTML += '<li><a href="javascript:void(0)" mx-page="'+(totalPage-1)+'">'+(totalPage - 1)+'</a></li>';
+			contentHTML += '<li><a href="javascript:void(0)" data-mx-page="'+(totalPage-1)+'">'+(totalPage - 1)+'</a></li>';
 		}
 		else if (pageTo + 1 != totalPage){
-			contentHTML += '<li mx-disabled><a href="javascript:void(0)">...</a></li>';
+			contentHTML += '<li data-mx-disabled><a href="javascript:void(0)">...</a></li>';
 		}
 		flagActive = (currentPage == totalPage) ? 'active' : '';
 		if (totalPage != 1){
-			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" mx-page="'+totalPage+'">'+totalPage+'</a></li>';
+			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" data-mx-page="'+totalPage+'">'+totalPage+'</a></li>';
 		}
 		flagDisable = (currentPage == totalPage) ? 'disabled' : '';
-		contentHTML += '<li class="'+flagDisable+'"><a href="javascript:void(0)" mx-page="'+(currentPage+1)+'">&raquo;</a></li>';
+		contentHTML += '<li class="'+flagDisable+'"><a href="javascript:void(0)" data-mx-page="'+(currentPage+1)+'">&raquo;</a></li>';
 		contentHTML += '</ul>';
 		return contentHTML;
 	}
