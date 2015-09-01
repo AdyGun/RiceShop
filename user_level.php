@@ -3,7 +3,7 @@
 	<script type="text/javascript">		
 		function submitAjaxForm(){
 			$.ajax({                                      
-				url: 'ajax/module_submitForm.php',                  
+				url: 'ajax/userlevel_submitForm.php',                  
 				type: 'post',
 				data: $('#box_input_form form').serialize(),
 				dataType: 'json',         
@@ -24,7 +24,6 @@
 			if (command == 'cancel'){
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
-				$('#box_input_form form #radio_issub_no').prop('checked', true);
 				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
@@ -46,7 +45,7 @@
 		}
 		function refreshDataTable(contSearch, contPage){
 			$.ajax({
-				url: 'ajax/module_getTableData.php',
+				url: 'ajax/userlevel_getTableData.php',
 				type: 'post',
 				data: {
 					page: contPage,
@@ -63,19 +62,16 @@
 					$('#table_data_list tbody tr').remove();
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
-						$('#table_data_list tbody').append('<tr><td colspan="7">Module tidak ditemukan</td></tr>');
+						$('#table_data_list tbody').append('<tr><td colspan="4">Level User tidak ditemukan</td></tr>');
 					}
 					else{
 						/* Table Data */
 						var tabledata = result.data.tabledata;
 						for (var i=0; i<result.data.tabledata.length; i++){
-							var tabContent = '<tr data-mx-id="'+tabledata[i].module_id+'">';
-							tabContent += '<td>'+tabledata[i].module_id+'</td>';
-							tabContent += '<td>'+tabledata[i].module_name+'</td>';
-							tabContent += '<td>'+tabledata[i].category+'</td>';
+							var tabContent = '<tr data-mx-id="'+tabledata[i].level_id+'">';
+							tabContent += '<td>'+tabledata[i].level_id+'</td>';
+							tabContent += '<td>'+tabledata[i].level_name+'</td>';
 							tabContent += '<td>'+tabledata[i].description+'</td>';
-							tabContent += '<td>'+tabledata[i].pageurl+'</td>';
-							tabContent += '<td>'+tabledata[i].issub+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
 							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
@@ -110,8 +106,8 @@
 				type: 'post',
 				data: {
 					id: content,
-					table: 'tmodule',
-					field: 'module_id'
+					table: 'tuser_level',
+					field: 'level_id'
 				},        
 				dataType: 'json',         
 				beforeSend: function(){
@@ -124,29 +120,47 @@
 					}
 					else
 					{
+						fillCheckBoxModule(content);
 						$('#btncreate').addClass('hide');
 						validator.message.removeAll($('#box_input_form form'));
 						$('#hidcommand').val(command);
 						$('#hidid').val(result.data[0]);
 						$('#input_name').val(result.data[1]);
 						$('#hidname').val(result.data[1]);
-						$('#input_category').val(result.data[2]);
-						$('#input_description').val(result.data[3]);
-						$('#input_pageurl').val(result.data[4]);
-						$('#hidpageurl').val(result.data[4]);
-						if (result.data[5] == '1')
-							$('#radio_issub_yes').prop('checked', true);
-						else
-							$('#radio_issub_no').prop('checked', true);
-						
+						$('#input_description').val(result.data[2]);
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							$('#input_name, #input_category, #input_pageurl').blur();
+							$('#input_name').blur();
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
 							$('#btnupdate').addClass('hide');
+						}
+					}		
+				}
+			});
+		}
+		function fillCheckBoxModule(content){
+			$.ajax({
+				url: 'ajax/userlevel_getAccessModule.php',
+				type: 'post',
+				data: {
+					id: content,
+				},        
+				dataType: 'json',
+				beforeSend: function(){
+					helper.showBoxLoading('#box_input_form');
+				},
+				success: function(result){
+					helper.removeBoxLoading('#box_input_form');
+					if (!result.type){
+						helper.showAlertMessage(result.alert);
+					}
+					else{
+						$('#box_input_form form input[type="checkbox"][name="input[module][]"]').removeAttr('checked');
+						for (var i = 0; i < result.data.length; i++){
+							$('#box_input_form form input[type="checkbox"][value="'+result.data[i][0]+'"]').prop('checked', true);
 						}
 					}		
 				}
@@ -171,18 +185,9 @@
 			/* Form Validator */
 			$('#input_name').blur(function(){
 				if ($('#hidcommand').val() == 'create')
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module Name', 4, 'tmodule', 'module_name', '', 'no');
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Level User', 4, 'tuser_level', 'level_name', '', 'level_deletedate');
 				else
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module Name', 4, 'tmodule', 'module_name', $('#hidname').val(), 'no');
-			});
-			$('#input_pageurl').blur(function(){
-				if ($('#hidcommand').val() == 'create')
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module PageURL', 6, 'tmodule', 'module_pageurl', '', 'no');
-				else
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module PageURL', 6, 'tmodule', 'module_pageurl', $('#hidpageurl').val(), 'no');
-			});
-			$('#input_category').blur(function(){
-					validator.check.minLength($(this).parents('.form-group'), 'Module Category', 4);
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Level User', 4, 'tuser_level', 'level_name', $('#hidname').val(), 'level_deletedate');
 			});
 		});
 	</script>
@@ -193,12 +198,12 @@
 		<section class="content-header">
 			<h1>
 				Utility
-				<small>Module</small>
+				<small>Level User</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 				<li class="active">Utility</li>
-				<li class="active">Module</li>
+				<li class="active">Level User</li>
 			</ol>
 		</section><!-- /.content-header -->
 		
@@ -210,7 +215,7 @@
 			<!-- CREATE NEW FORM -->
 			<div class="box box-primary" id="box_input_form">
 				<div class="box-header with-border">
-					<h3 class="box-title">Tambah Module Baru</h3>
+					<h3 class="box-title">Tambah Level User Baru</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
@@ -218,51 +223,39 @@
 				<form class="form-horizontal" role="form">
 					<div class="box-body">
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-md-12">
 								<div class="form-group">
-									<label for="input_name" class="col-sm-4 control-label">Module Name :</label>
-									<div class="col-sm-8">
+									<label class="col-sm-2 control-label" for="input_name">Nama Level User :</label>
+									<div class="col-sm-4">
 										<input type="text" class="form-control" id="input_name" name="input[name]" maxlength="30">
 										<span class="help-block"></span>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="input_category" class="col-sm-4 control-label">Module Category :</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_category" name="input[category]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="input_pageurl" class="col-sm-4 control-label">Module PageURL :</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_pageurl" name="input[pageurl]" maxlength="40">
-										<span class="help-block"></span>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">Module Description :</label>
-									<div class="col-sm-8">
+									<label class="col-sm-2 control-label">Keterangan :</label>
+									<div class="col-sm-4">
 										<textarea class="form-control" rows="3" id="input_description" name="input[description]"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-4 control-label">Is sub?</label>
-									<div class="col-sm-8">
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_no" value="0" checked />
-												No
-											</label>
-										</div>
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_yes" value="1" />
-												Yes
-											</label>
-										</div>
+									<label class="col-sm-2 control-label">Hak Akses :</label>
+									<div class="col-sm-10">
+										<?php
+											$query = "SELECT * FROM tmodule WHERE module_id<>'MOD0000' ORDER BY module_category";
+											if ($result = $mysqli->query($query)){
+												if ($result->num_rows > 0){
+													$modCount = 1;
+													while ($row = $result->fetch_assoc()){
+														echo '<div class="checkbox">';
+														echo 	 '<label>';
+														echo 	 	 '<input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" />';
+														echo 	 	 '['.$row['module_category'].'] <strong>'.$row['module_name'].'</strong> - '.$row['module_description'];
+														echo 	 '</label>';
+														echo '</div>';
+													}								
+												}
+											}
+										?>
 									</div>
 								</div>
 							</div>
@@ -276,7 +269,6 @@
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
-						<input type="hidden" id="hidpageurl" name="hidden[pageurl]">
 					</div>
 				</form>
 			</div><!-- /.create-new-module -->
@@ -309,12 +301,9 @@
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>Module ID</th>
-								<th>Module Name</th>
-								<th>Category</th>
-								<th>Description</th>
-								<th>PageURL</th>
-								<th>Is Sub?</th>
+								<th>Kode Level User</th>
+								<th>Nama Level User</th>
+								<th>Keterangan</th>
 								<th></th>
 							</tr>
 						</thead>

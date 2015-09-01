@@ -8,11 +8,11 @@
 		$go = true;
 		$fid = $mysqli->real_escape_string(strtoupper($_POST['hidden']['id']));
 		if ($_POST['hidden']['command']=="create" || $_POST['hidden']['command']=="update"){
-			$fname = $mysqli->real_escape_string(ucwords(strtolower($_POST['module']['name'])));			
-			$fcategory = $mysqli->real_escape_string(ucwords(strtolower($_POST['module']['category'])));	
-			$fpageurl = $mysqli->real_escape_string(strtolower($_POST['module']['pageurl']));			
-			$fdesc = $mysqli->real_escape_string(ucwords(strtolower($_POST['module']['description'])));
-			$fissub = $mysqli->real_escape_string($_POST['module']['issub']);
+			$fname = $mysqli->real_escape_string(ucwords(strtolower($_POST['input']['name'])));			
+			$fcategory = $mysqli->real_escape_string(ucwords(strtolower($_POST['input']['category'])));	
+			$fpageurl = $mysqli->real_escape_string(strtolower($_POST['input']['pageurl']));			
+			$fdesc = $mysqli->real_escape_string(ucwords(strtolower($_POST['input']['description'])));
+			$fissub = $mysqli->real_escape_string($_POST['input']['issub']);
 			/* Checking Validation */
 			if (strlen($fname)<4){
 				$alert[] = array(
