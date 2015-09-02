@@ -11,13 +11,22 @@
 var validator = new function(){
 	/*! Add or Remove Validation's Message */
 	this.message = new function(){
+		this.icon = {
+			success: 'check',
+			error: 'close',
+			warning: 'exclamation',
+		}
 		this.add = function(el, type, message){
-			if (type != '') { type = 'has-'+type; }
+			var ico = '';
+			if (type != '') {
+				ico = '<i class="fa fa-'+validator.message.icon[type]+'"></i> ';
+				type = 'has-'+type; 
+			}
 			el.removeClass('has-success')
 				.removeClass('has-error')
 				.removeClass('has-warning')
 				.addClass(type);
-			el.find('span.help-block').html(message);
+			el.find('span.help-block').html(ico+message);
 		}
 		this.remove = function(el){
 			el.removeClass('has-success')

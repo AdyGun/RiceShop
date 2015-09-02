@@ -7,7 +7,10 @@
 			$temppassword = $mysqli->real_escape_string($_POST["fpassword"]);
 			$password = sha1(md5($temppassword));
 			$level = "";
-			$query = "SELECT user_id, user_name, user_completename, level_id FROM tuser WHERE user_name='$username' AND user_password='$password' AND user_deletedate IS NULL";
+			$query = "SELECT u.user_id, u.user_name, u.user_completename, u.level_id, l.level_name
+								FROM tuser u
+								LEFT JOIN tuser_level l ON u.level_id = l.level_id
+								WHERE user_name='$username' AND user_password='$password' AND user_deletedate IS NULL";
 			if ($result = $mysqli->query($query)){
 				if ($result->num_rows > 0){
 					$duser = array();

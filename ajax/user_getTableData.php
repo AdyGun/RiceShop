@@ -14,26 +14,27 @@
 		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-		$fcondition = "(UPPER(l.level_id) LIKE '%$fsearch%' OR
-									  UPPER(l.level_name) LIKE '%$fsearch%' OR
-									  UPPER(l.level_description) LIKE '%$fsearch%') AND
-										l.level_deletedate IS NULL 
+		$fcondition = "(UPPER(u.user_name) LIKE '%$fsearch%' OR
+									  UPPER(u.user_completename) LIKE '%$fsearch%' OR
+									  UPPER(l.level_name) LIKE '%$fsearch%') AND
+										u.user_deletedate IS NULL 
 									";
-										// AND l.level_id <> 'LEV0000'
 		/* Table Data Query */
-		$query = "SELECT l.* 
-							FROM tuser_level l
+		$query = "SELECT u.user_id, u.user_name, u.user_completename, l.level_name 
+							FROM tuser u
+							LEFT JOIN tuser_level l ON l.level_id = u.level_id
 							WHERE $fcondition
-							ORDER BY l.level_id ASC
+							ORDER BY u.user_id ASC
 							$flimit
 						 ";
 		if ($result = $mysqli->query($query)){
 			if ($result->num_rows > 0){
 				while ($row = $result->fetch_assoc()){
 					$newRow = array(
-						'level_id' => $row['level_id'],
+						'user_id' => $row['user_id'],
+						'user_name' => $row['user_name'],
+						'user_completename' => $row['user_completename'],
 						'level_name' => $row['level_name'],
-						'description' => $row['level_description'],
 					);
 					$data['tabledata'][] = $newRow;
 				}
@@ -51,8 +52,9 @@
 			$isSuccess = false;
 		}
 		/* Paging Query */
-		$query = "SELECT COUNT(l.level_id) as recordcount
-							FROM tuser_level l
+		$query = "SELECT COUNT(u.user_id) as recordcount
+							FROM tuser u
+							LEFT JOIN tuser_level l ON l.level_id = u.level_id
 							WHERE $fcondition
 						 ";
 		if ($result = $mysqli->query($query)){

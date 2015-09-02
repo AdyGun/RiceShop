@@ -39,7 +39,7 @@
 				else{
 					$alert[] = array(
 						'type' => 'danger',
-						'message' => printf("Errormessage: %s\n", $mysqli->error),
+						'message' => "Errormessage: ".$mysqli->error,
 					);
 					$go = false;
 				}
@@ -76,7 +76,7 @@
 				else{
 					$alert[] = array(
 						'type' => 'danger',
-						'message' => printf("Errormessage: %s\n", $mysqli->error),
+						'message' => "Errormessage: ".$mysqli->error,
 					);
 					$go = false;
 				}
@@ -95,7 +95,7 @@
 					else{
 						$alert[] = array(
 							'type' => 'danger',
-							'message' => printf("Errormessage: %s\n", $mysqli->error),
+							'message' => "Errormessage: ".$mysqli->error,
 						);
 						$isSuccess = false;
 					}
@@ -117,7 +117,7 @@
 					else{
 						$alert[] = array(
 							'type' => 'danger',
-							'message' => printf("Errormessage: %s\n", $mysqli->error),
+							'message' => "Errormessage: ".$mysqli->error,
 						);
 						$isSuccess = false;
 					}
@@ -138,7 +138,7 @@
 			else{
 				$alert[] = array(
 					'type' => 'danger',
-					'message' => printf("Errormessage: %s\n", $mysqli->error),
+					'message' => "Errormessage: ".$mysqli->error,
 				);
 				$isSuccess = false;
 			}

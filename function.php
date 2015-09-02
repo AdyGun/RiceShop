@@ -38,12 +38,15 @@
 	
 	function getIconName($throwed_name){
 		$iconName = '';
-		switch ($throwed_name) {
-			case "Utama":
+		switch (strtolower($throwed_name)) {
+			case "utama":
 				$iconName = 'dashboard';
 				break;
-			case "Utility":
+			case "utility":
 				$iconName = 'wrench';
+				break;
+			case "master":
+				$iconName = 'laptop';
 				break;
 		}
 		return $iconName;

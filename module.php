@@ -187,21 +187,6 @@
 		});
 	</script>
 	
-	<!---------------------- Content Wrapper. Contains page content ---------------------->
-	<div class="content-wrapper">
-		<!---------------------- Content Header (Page header) ---------------------->
-		<section class="content-header">
-			<h1>
-				Utility
-				<small>Module</small>
-			</h1>
-			<ol class="breadcrumb">
-				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-				<li class="active">Utility</li>
-				<li class="active">Module</li>
-			</ol>
-		</section><!-- /.content-header -->
-		
 		<!---------------------- Main content ---------------------->
 		<section class="content">
 			<div id="content_alert">

@@ -7,7 +7,7 @@
 		if (isset($_SESSION["login"])){
 			/* Privilege Check */
 			$login = $mysqli->real_escape_string($_SESSION['login']['user_id']);
-			$query = "SELECT m.module_id
+			$query = "SELECT m.module_id, m.module_category, m.module_name
 								FROM tlevel_access l
 								INNER JOIN tmodule m ON l.module_id=m.module_id	
 								INNER JOIN tuser u ON u.level_id=l.level_id						
@@ -15,10 +15,12 @@
 							 ";
 			if ($result = $mysqli->query($query)){
 				if ($result->num_rows > 0){
-					$fpageid = "";
-					while ($row = $result->fetch_assoc()){
-						$fpageid = $row["module_id"];
-					}
+					$row = $result->fetch_row();
+					$fpageid = $row[0];
+					$_SESSION['module'] = array(
+						'category' => $row[1],
+						'name' => $row[2],
+					);
 					$result->free();
 					$flogindate = date("Y-m-d H:i:s");
 					$query = "UPDATE tuser SET user_status = 'Online', module_id = '$fpageid', user_accessdate = '$flogindate' WHERE user_id='$login'";
@@ -39,6 +41,12 @@
 		else{
 			header("Location: login.php?err=1");
 		}
+	}
+	else{
+		$_SESSION['module'] = array(
+			'category' => '404',
+			'name' => 'Error Page',
+		);
 	}
 ?>
 
@@ -72,7 +80,7 @@
 
 		<!-- jQuery 2.1.4 -->
     <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
-		
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -104,14 +112,14 @@
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="dist/img/avatar3.png" class="user-image" alt="User Image" />
-                  <span class="hidden-xs">AdyGun</span>
+                  <span class="hidden-xs"><?php echo $_SESSION['login']['user_name'];?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
                     <img src="dist/img/avatar3.png" class="img-circle" alt="User Image" />
                     <p>
-                      Ady Gunawan - Web Developer
+                      <?php echo $_SESSION['login']['user_completename'].' - '.$_SESSION['login']['level_name'];?>
                       <!--<small>Member since Aug. 2015</small>-->
                     </p>
                   </li>
@@ -140,7 +148,7 @@
             <li class="header">MENU NAVIGASI</li>
 						<?php
 							$login = $_SESSION["login"]['user_id'];
-							$query = "SELECT l.level_id, m.*
+							$query = "SELECT m.module_category, m.module_name, m.module_pageurl
 												FROM tlevel_access l
 												INNER JOIN tmodule m ON l.module_id=m.module_id
 												INNER JOIN tuser u ON u.level_id=l.level_id		
@@ -152,14 +160,14 @@
 									$tcategory = "";
 									$ctr = 0;
 									while ($row = $result->fetch_assoc()){
-										$active_mark = '';
-										if ($pagename == $row['module_pageurl']) $active_mark = 'active';
 										if ($row['module_category'] != $tcategory){
+											$main_active = '';
+											if ($_SESSION['module']['category'] == $row['module_category']) $main_active = 'active';
 											$nav_icon = getIconName($row['module_category']);
 											if ($ctr != 0){
 												echo '</ul></li>';
 											}
-											echo '<li class="treeview '.$active_mark.'">';
+											echo '<li class="treeview '.$main_active.'">';
 											echo 	 '<a href="#">';
 											echo 	 	 '<i class="fa fa-'.$nav_icon.'"></i> <span>'.$row['module_category'].'</span> <i class="fa fa-angle-left pull-right"></i>';
 											echo 	 '</a>';
@@ -167,7 +175,9 @@
 											
 											$tcategory = $row['module_category'];
 										}
-										echo '<li class="'.$active_mark.'"><a href="'.$row['module_pageurl'].'"><i class="fa fa-circle-o"></i> '.$row['module_name'].'</a></li>';
+										$sub_active = '';
+										if ($pagename == $row['module_pageurl']) $sub_active = 'active';
+										echo '<li class="'.$sub_active.'"><a href="'.$row['module_pageurl'].'"><i class="fa fa-circle-o"></i> '.$row['module_name'].'</a></li>';
 										$ctr++;
 										if ($ctr == $result->num_rows){
 											echo '</ul></li>';
@@ -185,4 +195,18 @@
         <!-- /.sidebar -->
       </aside>
 			
-			
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						<?php echo $_SESSION['module']['category']?>
+						<small><?php echo $_SESSION['module']['name']?></small>
+					</h1>
+					<ol class="breadcrumb">
+						<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+						<li class="active"><?php echo $_SESSION['module']['category']?></li>
+						<li class="active"><?php echo $_SESSION['module']['name']?></li>
+					</ol>
+				</section><!-- /.content-header -->
+					

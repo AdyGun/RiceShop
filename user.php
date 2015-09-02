@@ -3,7 +3,7 @@
 	<script type="text/javascript">		
 		function submitAjaxForm(){
 			$.ajax({                                      
-				url: 'ajax/userlevel_submitForm.php',                  
+				url: 'ajax/user_submitForm.php',                  
 				type: 'post',
 				data: $('#box_input_form form').serialize(),
 				dataType: 'json',         
@@ -45,7 +45,7 @@
 		}
 		function refreshDataTable(contSearch, contPage){
 			$.ajax({
-				url: 'ajax/userlevel_getTableData.php',
+				url: 'ajax/user_getTableData.php',
 				type: 'post',
 				data: {
 					page: contPage,
@@ -62,16 +62,16 @@
 					$('#table_data_list tbody tr').remove();
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
-						$('#table_data_list tbody').append('<tr><td colspan="4">Level User tidak ditemukan</td></tr>');
+						$('#table_data_list tbody').append('<tr><td colspan="4">User tidak ditemukan</td></tr>');
 					}
 					else{
 						/* Table Data */
 						var tabledata = result.data.tabledata;
 						for (var i=0; i<result.data.tabledata.length; i++){
-							var tabContent = '<tr data-mx-id="'+tabledata[i].level_id+'">';
-							tabContent += '<td>'+tabledata[i].level_id+'</td>';
+							var tabContent = '<tr data-mx-id="'+tabledata[i].user_id+'">';
+							tabContent += '<td>'+tabledata[i].user_name+'</td>';
+							tabContent += '<td>'+tabledata[i].user_completename+'</td>';
 							tabContent += '<td>'+tabledata[i].level_name+'</td>';
-							tabContent += '<td>'+tabledata[i].description+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
 							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
@@ -102,12 +102,10 @@
 		}
 		function fillTextField(content,command){
 			$.ajax({
-				url: 'ajax/global_getSingleRowData.php',
+				url: 'ajax/user_fillFormData.php',
 				type: 'post',
 				data: {
 					id: content,
-					table: 'tuser_level',
-					field: 'level_id'
 				},        
 				dataType: 'json',         
 				beforeSend: function(){
@@ -120,47 +118,25 @@
 					}
 					else
 					{
-						fillCheckBoxModule(content);
 						$('#btncreate').addClass('hide');
 						validator.message.removeAll($('#box_input_form form'));
 						$('#hidcommand').val(command);
 						$('#hidid').val(result.data[0]);
 						$('#input_name').val(result.data[1]);
 						$('#hidname').val(result.data[1]);
-						$('#input_description').val(result.data[2]);
+						$('#input_completename').val(result.data[2]);
+						$('#dd_level').val(result.data[3]);
+						if ($('#dd_level').val() != result.data[3]){
+							$('#dd_level').val($('#dd_level option').eq(0).val());
+						}
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							$('#input_name').blur();
+							$('#input_name, #input_completename').blur();
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
 							$('#btnupdate').addClass('hide');
-						}
-					}		
-				}
-			});
-		}
-		function fillCheckBoxModule(content){
-			$.ajax({
-				url: 'ajax/userlevel_getAccessModule.php',
-				type: 'post',
-				data: {
-					id: content,
-				},        
-				dataType: 'json',
-				beforeSend: function(){
-					helper.showBoxLoading('#box_input_form');
-				},
-				success: function(result){
-					helper.removeBoxLoading('#box_input_form');
-					if (!result.type){
-						helper.showAlertMessage(result.alert);
-					}
-					else{
-						$('#box_input_form form input[type="checkbox"][name="input[module][]"]').removeAttr('checked');
-						for (var i = 0; i < result.data.length; i++){
-							$('#box_input_form form input[type="checkbox"][value="'+result.data[i][0]+'"]').prop('checked', true);
 						}
 					}		
 				}
@@ -185,12 +161,16 @@
 			/* Form Validator */
 			$('#input_name').blur(function(){
 				if ($('#hidcommand').val() == 'create')
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Level User', 4, 'tuser_level', 'level_name', '', 'level_deletedate');
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Login', 4, 'tuser', 'user_name', '', 'user_deletedate');
 				else
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Level User', 4, 'tuser_level', 'level_name', $('#hidname').val(), 'level_deletedate');
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Login', 4, 'tuser', 'user_name', $('#hidname').val(), 'user_deletedate');
+			});
+			$('#input_completename').blur(function(){
+				validator.check.minLength($(this).parents('.form-group'), 'Nama Lengkap', 4);
 			});
 		});
 	</script>
+	
 
 		<!---------------------- Main content ---------------------->
 		<section class="content">
@@ -200,7 +180,7 @@
 			<!-- CREATE NEW FORM -->
 			<div class="box box-primary" id="box_input_form">
 				<div class="box-header with-border">
-					<h3 class="box-title">Tambah Level User Baru</h3>
+					<h3 class="box-title">Tambah User Baru</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
@@ -210,37 +190,39 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input_name">Nama Level User :</label>
+									<label class="col-sm-2 control-label" for="input_name">Nama Login :</label>
 									<div class="col-sm-4">
 										<input type="text" class="form-control" id="input_name" name="input[name]" maxlength="30">
 									</div>
 									<span class="help-block"></span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label">Keterangan :</label>
-									<div class="col-sm-4">
-										<textarea class="form-control" rows="3" id="input_description" name="input[description]"></textarea>
+									<label class="col-sm-2 control-label" for="input_completename">Nama Lengkap :</label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control" id="input_completename" name="input[completename]" maxlength="40">
 									</div>
+									<span class="help-block"></span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label">Hak Akses :</label>
-									<div class="col-sm-10">
-										<?php
-											$query = "SELECT * FROM tmodule WHERE module_id<>'MOD0000' ORDER BY module_category";
-											if ($result = $mysqli->query($query)){
-												if ($result->num_rows > 0){
-													while ($row = $result->fetch_assoc()){
-														echo '<div class="checkbox">';
-														echo 	 '<label>';
-														echo 	 	 '<input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" />';
-														echo 	 	 '['.$row['module_category'].'] <strong>'.$row['module_name'].'</strong> - '.$row['module_description'];
-														echo 	 '</label>';
-														echo '</div>';
+									<label class="col-sm-2 control-label">Level Akses :</label>
+									<div class="col-sm-4">
+										<select class="form-control" id="dd_level" name="input[level]">
+											<?php
+												$query = "SELECT level_id, level_name FROM tuser_level WHERE level_deletedate IS NULL ORDER BY level_name ASC";
+												if ($result = $mysqli->query($query)){
+													if ($result->num_rows > 0){
+														while ($row = $result->fetch_assoc()){
+															echo '<option value="'.$row['level_id'].'">'.$row['level_name'].'</option>';
+														}
+														echo '</select>';
+														$result->free();
 													}
-													$result->free();
+													else{
+														echo '<option value="0">-- Data kosong--</option>';
+													}
 												}
-											}
-										?>
+											?>
+										</select>
 									</div>
 								</div>
 							</div>
@@ -260,7 +242,7 @@
 			<!-- TABLE DATA LIST -->
 			<div class="box box-info box-solid" id="box_table_list">
 				<div class="box-header with-border">
-					<h3 class="box-title">Daftar Module</h3>
+					<h3 class="box-title">Daftar User</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
@@ -286,9 +268,9 @@
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>Kode Level User</th>
-								<th>Nama Level User</th>
-								<th>Keterangan</th>
+								<th>Nama Login</th>
+								<th>Nama Lengkap</th>
+								<th>Level User</th>
 								<th></th>
 							</tr>
 						</thead>
