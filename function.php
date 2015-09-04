@@ -46,6 +46,9 @@
 				$iconName = 'wrench';
 				break;
 			case "master":
+				$iconName = 'edit';
+				break;
+			case "transaksi":
 				$iconName = 'laptop';
 				break;
 		}

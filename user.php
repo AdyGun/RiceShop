@@ -186,43 +186,40 @@
 				</div><!-- /.box-header -->
 				<form class="form-horizontal" role="form">
 					<div class="box-body">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input_name">Nama Login :</label>
-									<div class="col-sm-4">
-										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
-									</div>
-									<span class="help-block"></span>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_name">Nama Login :</label>
+								<div class="col-sm-4">
+									<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input_completename">Nama Lengkap :</label>
-									<div class="col-sm-5">
-										<input type="text" class="form-control" id="input_completename" name="input[completename]" maxlength="40">
-									</div>
-									<span class="help-block"></span>
+								<span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_completename">Nama Lengkap :</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" id="input_completename" name="input[completename]" maxlength="40">
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">Level Akses :</label>
-									<div class="col-sm-4">
-										<select class="form-control" id="dd_level" name="input[level]">
-											<?php
-												$query = "SELECT level_id, level_name FROM tuser_level WHERE level_deletedate IS NULL ORDER BY level_name ASC";
-												if ($result = $mysqli->query($query)){
-													if ($result->num_rows > 0){
-														while ($row = $result->fetch_assoc()){
-															echo '<option value="'.$row['level_id'].'">'.$row['level_name'].'</option>';
-														}
-														echo '</select>';
-														$result->free();
+								<span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Level Akses :</label>
+								<div class="col-sm-4">
+									<select class="form-control" id="dd_level" name="input[level]">
+										<?php
+											$query = "SELECT level_id, level_name FROM tuser_level WHERE level_deletedate IS NULL ORDER BY level_name ASC";
+											if ($result = $mysqli->query($query)){
+												if ($result->num_rows > 0){
+													while ($row = $result->fetch_assoc()){
+														echo '<option value="'.$row['level_id'].'">'.$row['level_name'].'</option>';
 													}
-													else{
-														echo '<option value="0">-- Data kosong--</option>';
-													}
+													$result->free();
 												}
-											?>
-										</select>
-									</div>
+												else{
+													echo '<option value="0">-- Data kosong--</option>';
+												}
+											}
+										?>
+									</select>
 								</div>
 							</div>
 						</div>

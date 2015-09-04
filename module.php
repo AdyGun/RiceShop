@@ -201,52 +201,50 @@
 				</div><!-- /.box-header -->
 				<form class="form-horizontal" role="form">
 					<div class="box-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label for="input_name" class="col-sm-4 control-label">Module Name :</label>
-									<div class="col-sm-8">
-										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="input_category" class="col-sm-4 control-label">Module Category :</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_category" name="input[category]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="input_pageurl" class="col-sm-4 control-label">Module PageURL :</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_pageurl" name="input[pageurl]" maxlength="40">
-										<span class="help-block"></span>
-									</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="input_name" class="col-sm-4 control-label">Module Name :</label>
+								<div class="col-sm-8">
+									<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
+									<span class="help-block inline"></span>
 								</div>
 							</div>
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">Module Description :</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
-									</div>
+							<div class="form-group">
+								<label for="input_category" class="col-sm-4 control-label">Module Category :</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="input_category" name="input[category]" maxlength="30">
+									<span class="help-block inline"></span>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label">Is sub?</label>
-									<div class="col-sm-8">
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_no" value="0" checked />
-												No
-											</label>
-										</div>
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_yes" value="1" />
-												Yes
-											</label>
-										</div>
+							</div>
+							<div class="form-group">
+								<label for="input_pageurl" class="col-sm-4 control-label">Module PageURL :</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="input_pageurl" name="input[pageurl]" maxlength="40">
+									<span class="help-block inline"></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="col-sm-4 control-label">Module Description :</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label">Is sub?</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label>
+											<input type="radio" name="input[issub]" id="radio_issub_no" value="0" checked />
+											No
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="input[issub]" id="radio_issub_yes" value="1" />
+											Yes
+										</label>
 									</div>
 								</div>
 							</div>

@@ -175,7 +175,7 @@
 				validator.check.minLength($(this).parents('.form-group'), 'Alamat', 6);
 			});
 			$('#input_city').blur(function(){
-				validator.check.minLength($(this).parents('.form-group'), 'Alamat', 3);
+				validator.check.minLength($(this).parents('.form-group'), 'Kota', 3);
 			});
 		});
 	</script>
@@ -196,48 +196,46 @@
 				</div><!-- /.box-header -->
 				<form class="form-horizontal" role="form">
 					<div class="box-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label for="input_id" class="col-sm-4 control-label">Kode Supplier :</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control" id="input_id" name="input[id]" maxlength="10" disabled>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="input_name" class="col-sm-4 control-label">Nama Supplier :</label>
-									<div class="col-sm-6">
-										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label">Alamat :</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" rows="2" id="input_address" name="input[address]"></textarea>
-										<span class="help-block"></span>
-									</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="input_id" class="col-sm-4 control-label">Kode Supplier :</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="input_id" name="input[id]" maxlength="10" disabled>
 								</div>
 							</div>
-							<div class="col-lg-6">
-								<div class="form-group">
-									<label for="input_city" class="col-sm-4 control-label">Kota :</label>
-									<div class="col-sm-7">
-										<input type="text" class="form-control" id="input_city" name="input[city]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
+							<div class="form-group">
+								<label for="input_name" class="col-sm-4 control-label">Nama Supplier :</label>
+								<div class="col-sm-8">
+									<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
+									<span class="help-block inline"></span>
 								</div>
-								<div class="form-group">
-									<label for="input_phone" class="col-sm-4 control-label">Telpon :</label>
-									<div class="col-sm-5">
-										<input type="text" class="form-control auto-numeric" id="input_phone" name="input[phone]" maxlength="30">
-									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label">Alamat :</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="2" id="input_address" name="input[address]"></textarea>
+									<span class="help-block inline"></span>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label">Keterangan :</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
-									</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="input_city" class="col-sm-4 control-label">Kota :</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" id="input_city" name="input[city]" maxlength="30">
+									<span class="help-block inline"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input_phone" class="col-sm-4 control-label">Telpon :</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control auto-numeric" id="input_phone" name="input[phone]" maxlength="30">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label">Keterangan :</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
 								</div>
 							</div>
 						</div>

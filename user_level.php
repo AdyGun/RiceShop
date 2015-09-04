@@ -206,42 +206,40 @@
 				</div><!-- /.box-header -->
 				<form class="form-horizontal" role="form">
 					<div class="box-body">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input_name">Nama Level User :</label>
-									<div class="col-sm-4">
-										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
-									</div>
-									<span class="help-block"></span>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input_name">Nama Level User :</label>
+								<div class="col-sm-4">
+									<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">Keterangan :</label>
-									<div class="col-sm-4">
-										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
-									</div>
+								<span class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Keterangan :</label>
+								<div class="col-sm-4">
+									<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">Hak Akses :</label>
-									<div class="col-sm-10">
-										<?php
-											$query = "SELECT * FROM tmodule ORDER BY module_category";
-											 // WHERE module_id<>'MOD0000'
-											if ($result = $mysqli->query($query)){
-												if ($result->num_rows > 0){
-													while ($row = $result->fetch_assoc()){
-														echo '<div class="checkbox">';
-														echo 	 '<label>';
-														echo 	 	 '<input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" />';
-														echo 	 	 '['.$row['module_category'].'] <strong>'.$row['module_name'].'</strong> - '.$row['module_description'];
-														echo 	 '</label>';
-														echo '</div>';
-													}
-													$result->free();
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Hak Akses :</label>
+								<div class="col-sm-10">
+									<?php
+										$query = "SELECT * FROM tmodule ORDER BY module_category";
+										 // WHERE module_id<>'MOD0000'
+										if ($result = $mysqli->query($query)){
+											if ($result->num_rows > 0){
+												while ($row = $result->fetch_assoc()){
+													echo '<div class="checkbox">';
+													echo 	 '<label>';
+													echo 	 	 '<input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" />';
+													echo 	 	 '['.$row['module_category'].'] <strong>'.$row['module_name'].'</strong> - '.$row['module_description'];
+													echo 	 '</label>';
+													echo '</div>';
 												}
+												$result->free();
 											}
-										?>
-									</div>
+										}
+									?>
 								</div>
 							</div>
 						</div>
