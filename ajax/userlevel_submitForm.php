@@ -26,8 +26,8 @@
 			else{
 				$query = "SELECT level_name FROM tuser_level WHERE level_name='$fname'";				
 				if ($_POST['hidden']['command']=='update'){
-					$fhidname = $mysqli->real_escape_string(strtoupper($_POST['hidden']['name']));
-					$query .= " AND UPPER(level_name)<>'$fhidname'";
+					$fhidname = $mysqli->real_escape_string($_POST['hidden']['name']);
+					$query .= " AND level_name<>'$fhidname'";
 				}				
 				if ($result = $mysqli->query($query)){
 					if ($result->num_rows>0){

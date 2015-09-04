@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.6.0
+          <b>Version</b> 0.7.0
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>
@@ -33,6 +33,8 @@
     <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <!-- FastClick -->
     <script src="plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
+		<!-- FastClick -->
+    <script src="plugins/autonumeric/autoNumeric-1.9.39-min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
 		<!-- Bootstrap Validator -->

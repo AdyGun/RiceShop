@@ -3,7 +3,7 @@
 	<script type="text/javascript">		
 		function submitAjaxForm(){
 			$.ajax({                                      
-				url: 'ajax/module_submitForm.php',                  
+				url: 'ajax/supplier_submitForm.php',                  
 				type: 'post',
 				data: $('#box_input_form form').serialize(),
 				dataType: 'json',         
@@ -24,7 +24,6 @@
 			if (command == 'cancel'){
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
-				$('#box_input_form form #radio_issub_no').prop('checked', true);
 				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
@@ -46,7 +45,7 @@
 		}
 		function refreshDataTable(contSearch, contPage){
 			$.ajax({
-				url: 'ajax/module_getTableData.php',
+				url: 'ajax/supplier_getTableData.php',
 				type: 'post',
 				data: {
 					page: contPage,
@@ -63,19 +62,19 @@
 					$('#table_data_list tbody tr').remove();
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
-						$('#table_data_list tbody').append('<tr><td colspan="7">Module tidak ditemukan</td></tr>');
+						$('#table_data_list tbody').append('<tr><td colspan="7">Supplier tidak ditemukan</td></tr>');
 					}
 					else{
 						/* Table Data */
 						var tabledata = result.data.tabledata;
 						for (var i=0; i<result.data.tabledata.length; i++){
-							var tabContent = '<tr data-mx-id="'+tabledata[i].module_id+'">';
-							tabContent += '<td>'+tabledata[i].module_id+'</td>';
-							tabContent += '<td>'+tabledata[i].module_name+'</td>';
-							tabContent += '<td>'+tabledata[i].category+'</td>';
-							tabContent += '<td>'+tabledata[i].description+'</td>';
-							tabContent += '<td>'+tabledata[i].pageurl+'</td>';
-							tabContent += '<td>'+tabledata[i].issub+'</td>';
+							var tabContent = '<tr data-mx-id="'+tabledata[i].supplier_id+'">';
+							tabContent += '<td>'+tabledata[i].supplier_id+'</td>';
+							tabContent += '<td>'+tabledata[i].supplier_name+'</td>';
+							tabContent += '<td>'+tabledata[i].supplier_address+'</td>';
+							tabContent += '<td>'+tabledata[i].supplier_city+'</td>';
+							tabContent += '<td class="auto-numeric">'+tabledata[i].supplier_phone+'</td>';
+							tabContent += '<td>'+tabledata[i].supplier_description+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
 							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
@@ -101,6 +100,7 @@
 							refreshDataTable($('#input_search').val(), $(this).attr('data-mx-page'));
 						});
 					}
+					$('.auto-numeric').autoNumeric('init', {aSep: '', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'keep'});
 				}
 			});
 		}
@@ -110,8 +110,8 @@
 				type: 'post',
 				data: {
 					id: content,
-					table: 'tmodule',
-					field: 'module_id'
+					table: 'tsupplier',
+					field: 'supplier_id'
 				},        
 				dataType: 'json',         
 				beforeSend: function(){
@@ -127,21 +127,18 @@
 						validator.message.removeAll($('#box_input_form form'));
 						$('#hidcommand').val(command);
 						$('#hidid').val(result.data[0]);
+						$('#input_id').val(result.data[0]);
 						$('#input_name').val(result.data[1]);
 						$('#hidname').val(result.data[1]);
-						$('#input_category').val(result.data[2]);
-						$('#input_description').val(result.data[3]);
-						$('#input_pageurl').val(result.data[4]);
-						$('#hidpageurl').val(result.data[4]);
-						if (result.data[5] == '1')
-							$('#radio_issub_yes').prop('checked', true);
-						else
-							$('#radio_issub_no').prop('checked', true);
-						
+						$('#input_address').val(result.data[2]);
+						$('#input_city').val(result.data[3]);
+						$('#input_phone').val(result.data[4]);
+						$('#input_phone').autoNumeric('set', result.data[4]);
+						$('#input_description').val(result.data[5]);
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							$('#input_name, #input_category, #input_pageurl').blur();
+							$('#input_name, #input_address, #input_city').blur();
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
@@ -170,22 +167,20 @@
 			/* Form Validator */
 			$('#input_name').blur(function(){
 				if ($('#hidcommand').val() == 'create')
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module Name', 4, 'tmodule', 'module_name', '', 'no');
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Supplier', 4, 'tsupplier', 'supplier_name', '', 'supplier_deletedate');
 				else
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module Name', 4, 'tmodule', 'module_name', $('#hidname').val(), 'no');
+					validator.check.duplicatedValue($(this).parents('.form-group'), 'Nama Supplier', 4, 'tsupplier', 'supplier_name', $('#hidname').val(), 'supplier_deletedate');
 			});
-			$('#input_pageurl').blur(function(){
-				if ($('#hidcommand').val() == 'create')
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module PageURL', 6, 'tmodule', 'module_pageurl', '', 'no');
-				else
-					validator.check.duplicatedValue($(this).parents('.form-group'), 'Module PageURL', 6, 'tmodule', 'module_pageurl', $('#hidpageurl').val(), 'no');
+			$('#input_address').blur(function(){
+				validator.check.minLength($(this).parents('.form-group'), 'Alamat', 6);
 			});
-			$('#input_category').blur(function(){
-					validator.check.minLength($(this).parents('.form-group'), 'Module Category', 4);
+			$('#input_city').blur(function(){
+				validator.check.minLength($(this).parents('.form-group'), 'Alamat', 3);
 			});
 		});
 	</script>
 	
+
 		<!---------------------- Main content ---------------------->
 		<section class="content">
 			<div id="content_alert">
@@ -194,7 +189,7 @@
 			<!-- CREATE NEW FORM -->
 			<div class="box box-primary" id="box_input_form">
 				<div class="box-header with-border">
-					<h3 class="box-title">Tambah Module Baru</h3>
+					<h3 class="box-title">Tambah User Baru</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
@@ -204,49 +199,44 @@
 						<div class="row">
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label for="input_name" class="col-sm-4 control-label">Module Name :</label>
-									<div class="col-sm-8">
+									<label for="input_id" class="col-sm-4 control-label">Kode Supplier :</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="input_id" name="input[id]" maxlength="10" disabled>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input_name" class="col-sm-4 control-label">Nama Supplier :</label>
+									<div class="col-sm-6">
 										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 										<span class="help-block"></span>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="input_category" class="col-sm-4 control-label">Module Category :</label>
+									<label class="col-sm-4 control-label">Alamat :</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_category" name="input[category]" maxlength="30">
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="input_pageurl" class="col-sm-4 control-label">Module PageURL :</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" id="input_pageurl" name="input[pageurl]" maxlength="40">
+										<textarea class="form-control" rows="2" id="input_address" name="input[address]"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
 							</div>
 							<div class="col-lg-6">
 								<div class="form-group">
-									<label class="col-sm-4 control-label">Module Description :</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
+									<label for="input_city" class="col-sm-4 control-label">Kota :</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control" id="input_city" name="input[city]" maxlength="30">
+										<span class="help-block"></span>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-4 control-label">Is sub?</label>
+									<label for="input_phone" class="col-sm-4 control-label">Telpon :</label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control auto-numeric" id="input_phone" name="input[phone]" maxlength="30">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">Keterangan :</label>
 									<div class="col-sm-8">
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_no" value="0" checked />
-												No
-											</label>
-										</div>
-										<div class="radio">
-											<label>
-												<input type="radio" name="input[issub]" id="radio_issub_yes" value="1" />
-												Yes
-											</label>
-										</div>
+										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
 									</div>
 								</div>
 							</div>
@@ -260,14 +250,13 @@
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
-						<input type="hidden" id="hidpageurl" name="hidden[pageurl]">
 					</div>
 				</form>
 			</div><!-- /.create-new-module -->
 			<!-- TABLE DATA LIST -->
 			<div class="box box-info box-solid" id="box_table_list">
 				<div class="box-header with-border">
-					<h3 class="box-title">Daftar Module</h3>
+					<h3 class="box-title">Daftar Supplier</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
@@ -293,12 +282,12 @@
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>Module ID</th>
-								<th>Module Name</th>
-								<th>Category</th>
-								<th>Description</th>
-								<th>PageURL</th>
-								<th>Is Sub?</th>
+								<th>Kode</th>
+								<th>Nama</th>
+								<th>Alamat</th>
+								<th>Kota</th>
+								<th>Telpon</th>
+								<th>Keterangan</th>
 								<th></th>
 							</tr>
 						</thead>

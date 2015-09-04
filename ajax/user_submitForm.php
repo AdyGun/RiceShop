@@ -14,7 +14,6 @@
 			$fname = $mysqli->real_escape_string($_POST['input']['name']);
 			$fcompletename = $mysqli->real_escape_string($_POST['input']['completename']);
 			$flevel = $mysqli->real_escape_string(strtoupper($_POST['input']['level']));
-			
 			/* Checking Validation */
 			if (strlen($fname)<4){
 				$alert[] = array(
@@ -24,10 +23,10 @@
 				$go = false;
 			}
 			else{
-				$query = "SELECT user_name FROM tuser WHERE user_name='$fname'";				
+				$query = "SELECT user_name FROM tuser WHERE user_name='$fname'";
 				if ($_POST['hidden']['command']=='update'){
-					$fhidname = $mysqli->real_escape_string(strtoupper($_POST['hidden']['name']));
-					$query .= " AND UPPER(user_name)<>'$fhidname'";
+					$fhidname = $mysqli->real_escape_string($_POST['hidden']['name']);
+					$query .= " AND user_name<>'$fhidname'";
 				}				
 				if ($result = $mysqli->query($query)){
 					if ($result->num_rows>0){

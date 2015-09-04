@@ -46,7 +46,7 @@
 				<?php }?>
         <form action="login_check.php" method="post">
           <div class="form-group has-feedback">
-            <input type="text" class="form-control" placeholder="Username" name="fusername"/>
+            <input type="text" autofocus class="form-control" placeholder="Username" name="fusername"/>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">

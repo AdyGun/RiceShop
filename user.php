@@ -116,8 +116,7 @@
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
 					}
-					else
-					{
+					else{
 						$('#btncreate').addClass('hide');
 						validator.message.removeAll($('#box_input_form form'));
 						$('#hidcommand').val(command);
@@ -192,7 +191,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="input_name">Nama Login :</label>
 									<div class="col-sm-4">
-										<input type="text" class="form-control" id="input_name" name="input[name]" maxlength="30">
+										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 									</div>
 									<span class="help-block"></span>
 								</div>

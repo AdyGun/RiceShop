@@ -58,18 +58,18 @@ var helper = new function(){
 			// Mid Bar
 		for (var i = pageFrom; i <= pageTo; i++){
 			flagActive = (currentPage == i) ? 'active' : '';
-			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" data-mx-page="'+i+'">'+i+'</a></li>';
+			contentHTML += '<li class="'+flagActive+'"><a class="auto-numeric" href="javascript:void(0)" data-mx-page="'+i+'">'+i+'</a></li>';
 		}
 			// Right Bar
 		if (pageTo + 1 == totalPage - 1){
-			contentHTML += '<li><a href="javascript:void(0)" data-mx-page="'+(totalPage-1)+'">'+(totalPage - 1)+'</a></li>';
+			contentHTML += '<li><a class="auto-numeric" href="javascript:void(0)" data-mx-page="'+(totalPage-1)+'">'+(totalPage - 1)+'</a></li>';
 		}
 		else if (pageTo + 1 != totalPage){
 			contentHTML += '<li data-mx-disabled><a href="javascript:void(0)">...</a></li>';
 		}
 		flagActive = (currentPage == totalPage) ? 'active' : '';
 		if (totalPage != 1){
-			contentHTML += '<li class="'+flagActive+'"><a href="javascript:void(0)" data-mx-page="'+totalPage+'">'+totalPage+'</a></li>';
+			contentHTML += '<li class="'+flagActive+'"><a class="auto-numeric" href="javascript:void(0)" data-mx-page="'+totalPage+'">'+totalPage+'</a></li>';
 		}
 		flagDisable = (currentPage == totalPage) ? 'disabled' : '';
 		contentHTML += '<li class="'+flagDisable+'"><a href="javascript:void(0)" data-mx-page="'+(currentPage+1)+'">&raquo;</a></li>';

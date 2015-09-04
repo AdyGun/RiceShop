@@ -118,8 +118,7 @@
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
 					}
-					else
-					{
+					else{
 						fillCheckBoxModule(content);
 						$('#btncreate').addClass('hide');
 						validator.message.removeAll($('#box_input_form form'));
@@ -212,21 +211,22 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="input_name">Nama Level User :</label>
 									<div class="col-sm-4">
-										<input type="text" class="form-control" id="input_name" name="input[name]" maxlength="30">
+										<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 									</div>
 									<span class="help-block"></span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">Keterangan :</label>
 									<div class="col-sm-4">
-										<textarea class="form-control" rows="3" id="input_description" name="input[description]"></textarea>
+										<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label">Hak Akses :</label>
 									<div class="col-sm-10">
 										<?php
-											$query = "SELECT * FROM tmodule WHERE module_id<>'MOD0000' ORDER BY module_category";
+											$query = "SELECT * FROM tmodule ORDER BY module_category";
+											 // WHERE module_id<>'MOD0000'
 											if ($result = $mysqli->query($query)){
 												if ($result->num_rows > 0){
 													while ($row = $result->fetch_assoc()){
