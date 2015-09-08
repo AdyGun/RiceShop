@@ -3,6 +3,7 @@
 	include 'function.php';
 	
 	$pagename = strtolower(getPageName());
+	$pagedata;
 	if ($pagename != '404.php'){
 		if (isset($_SESSION["login"])){
 			/* Privilege Check */
@@ -17,9 +18,9 @@
 				if ($result->num_rows > 0){
 					$row = $result->fetch_row();
 					$fpageid = $row[0];
-					$_SESSION['module'] = array(
-						'category' => $row[1],
+					$pagedata = array(
 						'name' => $row[2],
+						'category' => $row[1],
 					);
 					$result->free();
 					$flogindate = date("Y-m-d H:i:s");
@@ -43,7 +44,7 @@
 		}
 	}
 	else{
-		$_SESSION['module'] = array(
+		$pagedata = array(
 			'category' => '404',
 			'name' => 'Error Page',
 		);
@@ -162,7 +163,7 @@
 									while ($row = $result->fetch_assoc()){
 										if ($row['module_category'] != $tcategory){
 											$main_active = '';
-											if ($_SESSION['module']['category'] == $row['module_category']) $main_active = 'active';
+											if ($pagedata['category'] == $row['module_category']) $main_active = 'active';
 											$nav_icon = getIconName($row['module_category']);
 											if ($ctr != 0){
 												echo '</ul></li>';
@@ -200,13 +201,13 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						<?php echo $_SESSION['module']['category']?>
-						<small><?php echo $_SESSION['module']['name']?></small>
+						<?php echo $pagedata['category']?>
+						<small><?php echo $pagedata['name']?></small>
 					</h1>
 					<ol class="breadcrumb">
 						<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-						<li class="active"><?php echo $_SESSION['module']['category']?></li>
-						<li class="active"><?php echo $_SESSION['module']['name']?></li>
+						<li class="active"><?php echo $pagedata['category']?></li>
+						<li class="active"><?php echo $pagedata['name']?></li>
 					</ol>
 				</section><!-- /.content-header -->
 					

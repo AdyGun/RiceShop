@@ -1,11 +1,12 @@
 <?php
 	include '../config.php';
 	include '../function.php';
-exit;
+	
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
 		$go = true;
+		$fcurrpage = getCurrentPageData($mysqli);
 		$fid = $mysqli->real_escape_string(strtoupper($_POST['hidden']['id']));
 		if ($_POST['hidden']['command']=="create" || $_POST['hidden']['command']=="update"){
 			$fname = $mysqli->real_escape_string($_POST['input']['name']);
@@ -76,6 +77,8 @@ exit;
 							'type' => 'success',
 							'message' => 'Supplier baru telah ditambahkan.',
 						);
+						// Insert Activity Log
+						addLog($mysqli,$flogin['user_id'],$fcurrpage['category'].' '.$fcurrpage['name'],$fid,'Tambah');
 					}
 					else{
 						$alert[] = array(
@@ -98,6 +101,8 @@ exit;
 							'type' => 'success',
 							'message' => 'Data Supplier berhasil diubah.',
 						);
+						// Insert Activity Log
+						addLog($mysqli,$flogin['user_id'],$fcurrpage['category'].' '.$fcurrpage['name'],$fid,'Ubah');
 					}
 					else{
 						$alert[] = array(
@@ -119,6 +124,8 @@ exit;
 					'type' => 'success',
 					'message' => 'Data Supplier telah berhasil dihapus.',
 				);
+				// Insert Activity Log
+				addLog($mysqli,$flogin['user_id'],$fcurrpage['category'].' '.$fcurrpage['name'],$fid,'Hapus');
 			}
 			else{
 				$alert[] = array(

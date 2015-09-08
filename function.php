@@ -6,6 +6,30 @@
 		return $realurl[0];
 	}
 	
+	function getCurrentPageData($pageLink){
+		$currPage = strtolower(getPageName());
+		$pageQuery = "SELECT m.* FROM tmodule m WHERE m.module_pageurl = '$currPage'";
+		if ($pageResult = $pageLink->query($pageQuery)){
+			if ($pageResult->num_rows > 0){
+				$pageRow = $pageResult->fetch_row();
+				$pageData = array(
+					'id' => $row[0],
+					'name' => $row[1],
+					'category' => $row[2],
+					'description' => $row[3],
+					'pageurl' => $row[4],
+					'issub' => $row[5],
+					'hascrud' => $row[6],
+				);
+				$pageResult->free();
+				return $pageData;
+			}
+		}
+		else{
+			printf("Errormessage: %s\n", $pageLink->error);
+		}
+	}
+	
 	function addLog($mysqli_link, $user_id, $log_name, $log_reference, $log_action){
 		//INSERT ACTIVITY LOG
 		$log_date = date("Y-m-d H:i:s");

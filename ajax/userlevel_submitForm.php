@@ -7,7 +7,7 @@
 	if (isset($_POST)){
 		$go = true;
 		$flogin = $_SESSION['login'];
-		$fcurrpage = $_SESSION['module'];
+		$fcurrpage = getCurrentPageData($mysqli);
 		$fid = $mysqli->real_escape_string(strtoupper($_POST['hidden']['id']));
 		$fdate = date('Y-m-d H:i:s');
 		if ($_POST['hidden']['command']=="create" || $_POST['hidden']['command']=="update"){
@@ -101,7 +101,11 @@
 				}
 				// Insert Level Access
 				foreach ($fmodule as $value){
-					$mQuery = "INSERT INTO tlevel_access VALUES ('$fid','$value');";
+					$mAC = isset($_POST['input'][$value]['c']) ? 1 : 0;
+					$mAR = isset($_POST['input'][$value]['r']) ? 1 : 0;
+					$mAU = isset($_POST['input'][$value]['u']) ? 1 : 0;
+					$mAD = isset($_POST['input'][$value]['d']) ? 1 : 0;
+					$mQuery = "INSERT INTO tlevel_access VALUES ('$fid','$value',$mAC,$mAR,$mAU,$mAD);";
 					if (!$mResult = $mysqli->query($mQuery)){
 						$alert[] = array(
 							'type' => 'danger',

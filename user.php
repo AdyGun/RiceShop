@@ -24,6 +24,7 @@
 			if (command == 'cancel'){
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
+				$('#box_input_form form input:not([disabled])').eq(0).focus();
 				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');

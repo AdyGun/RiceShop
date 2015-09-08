@@ -13,6 +13,7 @@
 			$fpageurl = $mysqli->real_escape_string(strtolower($_POST['input']['pageurl']));			
 			$fdesc = $mysqli->real_escape_string(ucwords(strtolower($_POST['input']['description'])));
 			$fissub = $mysqli->real_escape_string($_POST['input']['issub']);
+			$fhascrud = $mysqli->real_escape_string($_POST['input']['hascrud']);
 			/* Checking Validation */
 			if (strlen($fname)<4){
 				$alert[] = array(
@@ -85,7 +86,7 @@
 			if ($go == true){
 				if ($_POST['hidden']['command']=='create'){
 					$fid = autoGenerateID($mysqli, "MOD", "tmodule", "module_id", 4);
-					$query = "INSERT INTO tmodule VALUES ('$fid','$fname','$fcategory','$fdesc','$fpageurl',$fissub);";	
+					$query = "INSERT INTO tmodule VALUES ('$fid','$fname','$fcategory','$fdesc','$fpageurl',$fissub,$fhascrud);";	
 					if ($result = $mysqli->query($query)){
 						$alert[] = array(
 							'type' => 'success',
@@ -106,7 +107,8 @@
 											module_category='$fcategory',
 											module_description='$fdesc',
 											module_pageurl='$fpageurl',
-											module_issub=$fissub
+											module_issub=$fissub,
+											module_hascrud=$fhascrud
 										WHERE module_id='$fid'";
 					if ($result = $mysqli->query($query)){
 						$alert[] = array(

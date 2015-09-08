@@ -24,7 +24,9 @@
 			if (command == 'cancel'){
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
+				$('#box_input_form form input:not([disabled])').eq(0).focus();
 				$('#box_input_form form #radio_issub_no').prop('checked', true);
+				$('#box_input_form form #radio_hascrud_yes').prop('checked', true);
 				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
@@ -76,6 +78,7 @@
 							tabContent += '<td>'+tabledata[i].description+'</td>';
 							tabContent += '<td>'+tabledata[i].pageurl+'</td>';
 							tabContent += '<td>'+tabledata[i].issub+'</td>';
+							tabContent += '<td>'+tabledata[i].hascrud+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
 							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
@@ -133,10 +136,14 @@
 						$('#input_description').val(result.data[3]);
 						$('#input_pageurl').val(result.data[4]);
 						$('#hidpageurl').val(result.data[4]);
-						if (result.data[5] == '1')
+						if (result.data[5] == 1)
 							$('#radio_issub_yes').prop('checked', true);
 						else
 							$('#radio_issub_no').prop('checked', true);
+						if (result.data[6] == 1)
+							$('#radio_hascrud_yes').prop('checked', true);
+						else
+							$('#radio_hascrud_no').prop('checked', true);
 						
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
@@ -248,6 +255,23 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label">Has CRUD?</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label>
+											<input type="radio" name="input[hascrud]" id="radio_hascrud_yes" value="1" checked />
+											Yes
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="input[hascrud]" id="radio_hascrud_no" value="0" />
+											No
+										</label>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
@@ -297,6 +321,7 @@
 								<th>Description</th>
 								<th>PageURL</th>
 								<th>Is Sub?</th>
+								<th>Has CRUD?</th>
 								<th></th>
 							</tr>
 						</thead>

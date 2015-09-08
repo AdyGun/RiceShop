@@ -1,0 +1,73 @@
+Change Log:
+v0.7.2
+-new user_level access feature
+-add new field 'hascrud' to table module 
+-new global function getCurrentPageData
+-remove $_SESSION['module'] from all page, now using getCurrentPageData function instead
+-add changelog.txt
+
+v0.7.1
+- remove .row from Form's layout on all page
+- add 'inline' class on validation help-block for all One-Column Form
+- add icon for 'Transaction' menu
+- fixed wrong error message on Supplier page
+
+v0.7.0
+- add supplier page (CRUD and Data Table)
+- add autoNumeric plugins
+- add autofocus on first input field at every page form
+- all pagination bar now using autoNumeric plugins
+
+v0.6.3
+- new profile page (show user profile and change password feature)
+- add profile button beside logout button on header
+
+v0.6.2
+- Remove DataTables plugins's example files
+
+v0.6.1
+- Update template version to v2.3.0 (Credit to Almsaeed Studio)
+
+v0.6.0
+- new user page (CRUD and Data Table)
+- change header layout
+- delete data on user level page now just change the delete date field instead of deleting the record
+- add icon to validator message
+
+v0.5.0
+- new User Level page (CRUD and show Table working)
+- globalize variable name on Module.php
+- change several ajax's file name
+
+v0.4.0
+- add form validator js
+- add moment js plugins
+- form on module page now working with new validator
+- add new ajax for checking duplicated value on 1 table
+
+v0.3.1
+- create, update, and delete Module now working
+- remove DataTable from Module List
+- Module list table using simple table with some feature (search and pagination)
+- add ionicons and font-awesome plugins assets
+
+v0.3.0
+- add datatables plugins js and css
+- add module page (just input form and dataTables, still not functioning)
+- [fixed] jquery syntax not working
+- [fixed] access login page without logout
+
+v0.2.1
+- navigation menu now showing from module table
+- add missing blank database from last commit
+
+v0.2.0
+- initial configuration for database
+- add login and logout feature
+- add privilege check on header for logged in user
+- add function & 404 page
+
+v0.1.0
+- Creating initial page using web template by Almsaeed Studio.
+- Split index.html into header, footer, and blank index page.
+- Add plugin and bootstrap files.

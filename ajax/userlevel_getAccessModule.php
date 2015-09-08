@@ -7,7 +7,7 @@
 	if (isset($_POST))
 	{
 		$fid = $_POST['id'];
-		$query = "SELECT m.module_id
+		$query = "SELECT m.module_id, a.access_create, a.access_read, a.access_update, a.access_delete
 							FROM tlevel_access a
 							LEFT JOIN tmodule m ON m.module_id = a.module_id
 							WHERE a.level_id = '$fid'";

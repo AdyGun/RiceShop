@@ -24,6 +24,7 @@
 			if (command == 'cancel'){
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
+				$('#box_input_form form input:not([disabled])').eq(0).focus();
 				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
@@ -157,9 +158,17 @@
 						helper.showAlertMessage(result.alert);
 					}
 					else{
-						$('#box_input_form form input[type="checkbox"][name="input[module][]"]').removeAttr('checked');
+						$('#box_input_form form input[type="checkbox"]').removeAttr('checked');
 						for (var i = 0; i < result.data.length; i++){
 							$('#box_input_form form input[type="checkbox"][value="'+result.data[i][0]+'"]').prop('checked', true);
+							if (result.data[i][1] == 1) 
+								$('#table_module_list input[type="checkbox"][name="input['+result.data[i][0]+'][c]"]').prop('checked', true);
+							if (result.data[i][2] == 1) 
+								$('#table_module_list input[type="checkbox"][name="input['+result.data[i][0]+'][r]"]').prop('checked', true);
+							if (result.data[i][3] == 1) 
+								$('#table_module_list input[type="checkbox"][name="input['+result.data[i][0]+'][u]"]').prop('checked', true);
+							if (result.data[i][4] == 1) 
+								$('#table_module_list input[type="checkbox"][name="input['+result.data[i][0]+'][d]"]').prop('checked', true);
 						}
 					}		
 				}
@@ -180,6 +189,14 @@
 			$('#btnsearch').click(function(e){
 				e.preventDefault();
 				refreshDataTable($(this).val(), 1);
+			});
+			$('#table_module_list input[type="checkbox"][name="input[module][]"]').click(function(){
+				if ($(this).prop('checked')){
+					$(this).parents('tr').find('input[type="checkbox"]:not([name="input[module][]"])').prop('checked', true).prop('disabled', false);
+				}
+				else{
+					$(this).parents('tr').find('input[type="checkbox"]:not([name="input[module][]"])').prop('checked', false).prop('disabled', true);
+				}
 			});
 			/* Form Validator */
 			$('#input_name').blur(function(){
@@ -223,6 +240,54 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Hak Akses :</label>
 								<div class="col-sm-10">
+									<table id="table_module_list" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Kategori</th>
+												<th>Nama</th>
+												<th>Keterangan</th>
+												<th>Tambah</th>
+												<th>Baca</th>
+												<th>Ubah</th>
+												<th>Hapus</th>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- Table List -->
+											<?php
+												$query = "SELECT * FROM tmodule ORDER BY module_category";
+												 // WHERE module_id<>'MOD0000'
+												if ($result = $mysqli->query($query)){
+													if ($result->num_rows > 0){
+														while ($row = $result->fetch_assoc()){
+															echo '<tr>';
+															echo '<td><input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" /></td>';
+															echo '<td>'.$row['module_category'].'</td>';
+															echo '<td>'.$row['module_name'].'</td>';
+															echo '<td>'.$row['module_description'].'</td>';
+															if ($row['module_hascrud'] == 1){
+																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][c]" disabled /></td>';
+																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][r]" disabled /></td>';
+																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][u]" disabled /></td>';
+																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][d]" disabled /></td>';																
+															}
+															else{
+																echo '<td></td><td></td><td></td><td></td>';
+															}
+															echo '</tr>';
+														}
+														$result->free();
+													}
+												}
+											?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<label class="col-sm-2 control-label">Hak Akses :</label>
+								<div class="col-sm-10">
 									<?php
 										$query = "SELECT * FROM tmodule ORDER BY module_category";
 										 // WHERE module_id<>'MOD0000'
@@ -241,7 +306,7 @@
 										}
 									?>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">

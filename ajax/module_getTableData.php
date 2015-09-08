@@ -31,11 +31,12 @@
 		if ($result = $mysqli->query($query)){
 			if ($result->num_rows > 0){
 				while ($row = $result->fetch_assoc()){
-					$fissub = '';
-					if ($row['module_issub'] == 0)
-						$fissub = 'No';
-					else
+					$fissub = 'No';
+					if ($row['module_issub'])
 						$fissub = 'Yes';
+					$fhascrud = 'No';
+					if ($row['module_hascrud'])
+						$fhascrud = 'Yes';
 					$newRow = array(
 						'module_id' => $row['module_id'],
 						'module_name' => $row['module_name'],
@@ -43,6 +44,7 @@
 						'description' => $row['module_description'],
 						'pageurl' => $row['module_pageurl'],
 						'issub' => $fissub,
+						'hascrud' => $fhascrud,
 					);
 					$data['tabledata'][] = $newRow;
 				}
