@@ -14,13 +14,13 @@
 		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-		$fcondition = "UPPER(s.supplier_id) LIKE '%$fsearch%' OR
-									 UPPER(s.supplier_name) LIKE '%$fsearch%' OR
-									 UPPER(s.supplier_address) LIKE '%$fsearch%' OR
-									 UPPER(s.supplier_city) LIKE '%$fsearch%' OR
-									 UPPER(s.supplier_phone) LIKE '%$fsearch%' OR
-									 UPPER(s.supplier_description) LIKE '%$fsearch%' AND
-									 s.supplier_deletedate IS NULL 
+		$fcondition = "(s.supplier_id LIKE '%$fsearch%' OR
+									  s.supplier_name LIKE '%$fsearch%' OR
+									  s.supplier_address LIKE '%$fsearch%' OR
+									  s.supplier_city LIKE '%$fsearch%' OR
+									  s.supplier_phone LIKE '%$fsearch%' OR
+									  s.supplier_description LIKE '%$fsearch%') AND
+									  s.supplier_deletedate IS NULL 
 									";
 
 		/* Table Data Query */

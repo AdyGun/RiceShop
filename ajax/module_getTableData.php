@@ -14,10 +14,10 @@
 		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-		$fcondition = "UPPER(m.module_id) LIKE '%$fsearch%' OR
-									 UPPER(m.module_name) LIKE '%$fsearch%' OR
-									 UPPER(m.module_description) LIKE '%$fsearch%' OR
-									 UPPER(m.module_category) LIKE '%$fsearch%' OR
+		$fcondition = "m.module_id LIKE '%$fsearch%' OR
+									 m.module_name LIKE '%$fsearch%' OR
+									 m.module_description LIKE '%$fsearch%' OR
+									 m.module_category LIKE '%$fsearch%' OR
 									 m.module_pageurl LIKE '%$fsearch%'
 									";
 

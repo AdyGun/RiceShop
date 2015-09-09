@@ -14,6 +14,7 @@
 			$go = true;
 			$fid = $mysqli->real_escape_string(strtoupper($_POST['hidden']['id']));
 			if ($fcommand == 'create' || $fcommand == 'update'){
+				$flogin = $_SESSION['login'];
 				$fname = $mysqli->real_escape_string($_POST['input']['name']);
 				$faddress = $mysqli->real_escape_string($_POST['input']['address']);
 				$fcity = $mysqli->real_escape_string($_POST['input']['city']);

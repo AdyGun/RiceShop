@@ -14,9 +14,9 @@
 		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-		$fcondition = "(UPPER(u.user_name) LIKE '%$fsearch%' OR
-									  UPPER(u.user_completename) LIKE '%$fsearch%' OR
-									  UPPER(l.level_name) LIKE '%$fsearch%') AND
+		$fcondition = "(u.user_name LIKE '%$fsearch%' OR
+									  u.user_completename LIKE '%$fsearch%' OR
+									  l.level_name LIKE '%$fsearch%') AND
 										u.user_deletedate IS NULL 
 									";
 		/* Table Data Query */

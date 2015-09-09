@@ -78,8 +78,11 @@
     <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <!-- Daterange picker -->
     <link href="plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-    
-
+    <!-- Select2 -->
+    <link href="plugins/select2/select2.min.css" rel="stylesheet" type="text/css" >
+		<!-- Theme style -->
+    <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" >
+		
 		<!-- jQuery 2.1.4 -->
     <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 

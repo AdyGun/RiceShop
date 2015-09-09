@@ -4,8 +4,7 @@
 	$alert = array();
 	$isSuccess = true;
 	$data;
-	if (isset($_POST))
-	{
+	if (isset($_POST)){
 		$fid = $_POST['id'];
 		$ftable = $_POST['table'];
 		$ffield = $_POST['field'];

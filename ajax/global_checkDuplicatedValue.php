@@ -8,10 +8,10 @@
 		$fexc = $mysqli->real_escape_string($_POST['exc']);
 		$fdel = $mysqli->real_escape_string($_POST['del']);			
 		if ($fdel == 'no'){
-			$query = "SELECT $ffield FROM $ftable WHERE UPPER($ffield)=UPPER('$fid') AND $ffield<>'$fexc'";
+			$query = "SELECT $ffield FROM $ftable WHERE $ffield='$fid' AND $ffield<>'$fexc'";
 		}
 		else{
-			$query = "SELECT $ffield FROM $ftable WHERE UPPER($ffield)=UPPER('$fid') AND $ffield<>'$fexc' AND $fdel IS NULL";
+			$query = "SELECT $ffield FROM $ftable WHERE $ffield='$fid' AND $ffield<>'$fexc' AND $fdel IS NULL";
 		}
 		if ($result = $mysqli->query($query)){			
 			if ($result->num_rows > 0){

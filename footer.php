@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.7.3
+          <b>Version</b> 0.7.4
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>
@@ -21,11 +21,13 @@
     </script>
     <!-- Bootstrap 3.3.2 JS -->
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <!-- daterangepicker -->
+    <!-- Moment -->
     <script src="plugins/moment/moment.min.js" type="text/javascript"></script>
+    <!-- daterangepicker -->
     <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <!-- datepicker -->
     <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+		<script src="plugins/datepicker/locales/bootstrap-datepicker.id.js" type="text/javascript" charset="UTF-8"></script>
     <!-- Slimscroll -->
     <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <!-- FastClick -->

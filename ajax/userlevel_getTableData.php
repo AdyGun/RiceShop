@@ -14,9 +14,9 @@
 		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-		$fcondition = "(UPPER(l.level_id) LIKE '%$fsearch%' OR
-									  UPPER(l.level_name) LIKE '%$fsearch%' OR
-									  UPPER(l.level_description) LIKE '%$fsearch%') AND
+		$fcondition = "(l.level_id LIKE '%$fsearch%' OR
+									  l.level_name LIKE '%$fsearch%' OR
+									  l.level_description LIKE '%$fsearch%') AND
 										l.level_deletedate IS NULL 
 									";
 										// AND l.level_id <> 'LEV0000'
