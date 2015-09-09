@@ -81,7 +81,7 @@
 							tabContent += '<td>'+tabledata[i].hascrud+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
-							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+							tabContent += 		'<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">';
 							tabContent += 			'<span class="caret"></span>';
 							tabContent += 		'</button>';
 							tabContent += 		'<ul class="dropdown-menu">';
@@ -275,9 +275,17 @@
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
-						<button type="submit" data-mx-command="create" id="btncreate" class="btn btn-primary">Tambah Baru</button>
-						<button type="submit" data-mx-command="update" id="btnupdate" class="btn btn-success hide">Ubah</button>
-						<button type="submit" data-mx-command="delete" id="btndelete" class="btn btn-danger hide">Hapus</button>
+						<?php 
+							if ($_SESSION['access'][$pagedata['id']]['create'] == 1) {
+								echo '<button type="submit" data-mx-command="create" id="btncreate" class="btn btn-primary">Tambah Baru</button>';
+							} 
+							if ($_SESSION['access'][$pagedata['id']]['update'] == 1) { 
+								echo '<button type="submit" data-mx-command="update" id="btnupdate" class="btn btn-success hide">Ubah</button>';
+							} 
+							if ($_SESSION['access'][$pagedata['id']]['delete'] == 1) { 
+								echo '<button type="submit" data-mx-command="delete" id="btndelete" class="btn btn-danger hide">Hapus</button>';
+							} 
+						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
@@ -285,7 +293,9 @@
 						<input type="hidden" id="hidpageurl" name="hidden[pageurl]">
 					</div>
 				</form>
-			</div><!-- /.create-new-module -->
+			</div><!-- /.create-new-form -->
+			
+			<?php if ($_SESSION['access'][$pagedata['id']]['read'] == 1) { ?>
 			<!-- TABLE DATA LIST -->
 			<div class="box box-info box-solid" id="box_table_list">
 				<div class="box-header with-border">
@@ -333,7 +343,8 @@
 						<!-- Pagination Bar -->
 					</div>
 				</div>
-			</div><!-- /.create-new-module -->
+			</div><!-- /.table-data-list -->
+			<?php } ?>
 		</section><!--- /.main-content -->
 	</div><!-- /.content-wrapper -->
 	

@@ -9,7 +9,7 @@
 			if ($result = $mysqli->query($query)){
 				//INSERT ACTIVITY LOG
 				addLog($mysqli,$fuser,'','','Logout');
-				unset($_SESSION['login']);
+				session_unset();
 			}
 			else{
 				printf("Errormessage: %s\n", $mysqli->error);

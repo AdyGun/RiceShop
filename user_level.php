@@ -30,6 +30,7 @@
 				$('#btnupdate').addClass('hide');
 				$('#btndelete').addClass('hide');
 				$('#hidcommand').val('create');
+				$('#table_module_list input[type="checkbox"]:not([name="input[module][]"])').prop('checked', false).prop('disabled', true);
 			}
 			else{				
 				if (command == 'delete'){
@@ -75,7 +76,7 @@
 							tabContent += '<td>'+tabledata[i].description+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
-							tabContent += 		'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+							tabContent += 		'<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">';
 							tabContent += 			'<span class="caret"></span>';
 							tabContent += 		'</button>';
 							tabContent += 		'<ul class="dropdown-menu">';
@@ -158,9 +159,10 @@
 						helper.showAlertMessage(result.alert);
 					}
 					else{
-						$('#box_input_form form input[type="checkbox"]').removeAttr('checked');
+						$('#table_module_list input[type="checkbox"]').removeAttr('checked');
 						for (var i = 0; i < result.data.length; i++){
-							$('#box_input_form form input[type="checkbox"][value="'+result.data[i][0]+'"]').prop('checked', true);
+							$('#table_module_list input[type="checkbox"][value="'+result.data[i][0]+'"]').prop('checked', true);
+							$('#table_module_list input[type="checkbox"][data-mx-id="'+result.data[i][0]+'"]').prop('disabled', false);
 							if (result.data[i][1] == 1) 
 								$('#table_module_list input[type="checkbox"][name="input['+result.data[i][0]+'][c]"]').prop('checked', true);
 							if (result.data[i][2] == 1) 
@@ -190,7 +192,7 @@
 				e.preventDefault();
 				refreshDataTable($(this).val(), 1);
 			});
-			$('#table_module_list input[type="checkbox"][name="input[module][]"]').click(function(){
+			$('#table_module_list input[type="checkbox"][name="input[module][]"]').change(function(){
 				if ($(this).prop('checked')){
 					$(this).parents('tr').find('input[type="checkbox"]:not([name="input[module][]"])').prop('checked', true).prop('disabled', false);
 				}
@@ -267,10 +269,10 @@
 															echo '<td>'.$row['module_name'].'</td>';
 															echo '<td>'.$row['module_description'].'</td>';
 															if ($row['module_hascrud'] == 1){
-																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][c]" disabled /></td>';
-																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][r]" disabled /></td>';
-																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][u]" disabled /></td>';
-																echo '<td><input type="checkbox" name="input['.$row["module_id"].'][d]" disabled /></td>';																
+																echo '<td><input type="checkbox" data-mx-id="'.$row["module_id"].'" name="input['.$row["module_id"].'][c]" disabled /></td>';
+																echo '<td><input type="checkbox" data-mx-id="'.$row["module_id"].'" name="input['.$row["module_id"].'][r]" disabled /></td>';
+																echo '<td><input type="checkbox" data-mx-id="'.$row["module_id"].'" name="input['.$row["module_id"].'][u]" disabled /></td>';
+																echo '<td><input type="checkbox" data-mx-id="'.$row["module_id"].'" name="input['.$row["module_id"].'][d]" disabled /></td>';																
 															}
 															else{
 																echo '<td></td><td></td><td></td><td></td>';
@@ -285,41 +287,29 @@
 									</table>
 								</div>
 							</div>
-							<!-- <div class="form-group">
-								<label class="col-sm-2 control-label">Hak Akses :</label>
-								<div class="col-sm-10">
-									<?php
-										$query = "SELECT * FROM tmodule ORDER BY module_category";
-										 // WHERE module_id<>'MOD0000'
-										if ($result = $mysqli->query($query)){
-											if ($result->num_rows > 0){
-												while ($row = $result->fetch_assoc()){
-													echo '<div class="checkbox">';
-													echo 	 '<label>';
-													echo 	 	 '<input type="checkbox" name="input[module][]" value="'.$row["module_id"].'" />';
-													echo 	 	 '['.$row['module_category'].'] <strong>'.$row['module_name'].'</strong> - '.$row['module_description'];
-													echo 	 '</label>';
-													echo '</div>';
-												}
-												$result->free();
-											}
-										}
-									?>
-								</div>
-							</div> -->
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
-						<button type="submit" data-mx-command="create" id="btncreate" class="btn btn-primary">Tambah Baru</button>
-						<button type="submit" data-mx-command="update" id="btnupdate" class="btn btn-success hide">Ubah</button>
-						<button type="submit" data-mx-command="delete" id="btndelete" class="btn btn-danger hide">Hapus</button>
+						<?php 
+							if ($_SESSION['access'][$pagedata['id']]['create'] == 1) {
+								echo '<button type="submit" data-mx-command="create" id="btncreate" class="btn btn-primary">Tambah Baru</button>';
+							} 
+							if ($_SESSION['access'][$pagedata['id']]['update'] == 1) { 
+								echo '<button type="submit" data-mx-command="update" id="btnupdate" class="btn btn-success hide">Ubah</button>';
+							} 
+							if ($_SESSION['access'][$pagedata['id']]['delete'] == 1) { 
+								echo '<button type="submit" data-mx-command="delete" id="btndelete" class="btn btn-danger hide">Hapus</button>';
+							} 
+						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
 					</div>
 				</form>
-			</div><!-- /.create-new-module -->
+			</div><!-- /.create-new-form -->
+			
+			<?php if ($_SESSION['access'][$pagedata['id']]['read'] == 1) { ?>
 			<!-- TABLE DATA LIST -->
 			<div class="box box-info box-solid" id="box_table_list">
 				<div class="box-header with-border">
@@ -363,7 +353,8 @@
 						<!-- Pagination Bar -->
 					</div>
 				</div>
-			</div><!-- /.create-new-module -->
+			</div><!-- /.table-data-list -->
+			<?php } ?>
 		</section><!--- /.main-content -->
 	</div><!-- /.content-wrapper -->
 	

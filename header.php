@@ -1,7 +1,7 @@
 <?php
 	include 'config.php';
 	include 'function.php';
-	
+
 	$pagename = strtolower(getPageName());
 	$pagedata;
 	if ($pagename != '404.php'){
@@ -19,8 +19,9 @@
 					$row = $result->fetch_row();
 					$fpageid = $row[0];
 					$pagedata = array(
-						'name' => $row[2],
+						'id' => $row[0],
 						'category' => $row[1],
+						'name' => $row[2],
 					);
 					$result->free();
 					$flogindate = date("Y-m-d H:i:s");

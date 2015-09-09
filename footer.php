@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.7.2
+          <b>Version</b> 0.7.3
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>
@@ -21,9 +21,6 @@
     </script>
     <!-- Bootstrap 3.3.2 JS -->
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-		<!-- DataTables -->
-    <script src="plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
-    <script src="plugins/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
     <!-- daterangepicker -->
     <script src="plugins/moment/moment.min.js" type="text/javascript"></script>
     <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
@@ -33,8 +30,10 @@
     <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <!-- FastClick -->
     <script src="plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
-		<!-- FastClick -->
+		<!-- AutoNumeric -->
     <script src="plugins/autonumeric/autoNumeric-1.9.39-min.js" type="text/javascript"></script>
+		<!-- Select2 -->
+    <script src="plugins/select2/select2.full.min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
 		<!-- Bootstrap Validator -->

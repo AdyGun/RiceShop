@@ -17,11 +17,13 @@
 					while ($row = $result->fetch_assoc()){
 						$duser = $row;
 					}
-					$_SESSION["login"] = $duser;
 					$result->free();
+					//Add Login Session
+					$_SESSION["login"] = $duser;
+					//Add Access Rights Session
+					setAccessSession($mysqli, $duser['level_id']);
 					//INSERT ACTIVITY LOG
 					addLog($mysqli,$duser["user_id"],'','','Login');
-					
 					header("Location: index.php");
 				}
 				else{

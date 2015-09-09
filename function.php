@@ -1,25 +1,25 @@
 <?php
-	function getPageName(){
-		$currentFile = $_SERVER["PHP_SELF"];
+	function getPageName($currentURL = ''){
+		$currentFile = ($currentURL == '') ? $_SERVER["PHP_SELF"] : $currentURL;
 		$parts = Explode('/', $currentFile);
 		$realurl = Explode('?', $parts[count($parts)-1]);
 		return $realurl[0];
 	}
 	
-	function getCurrentPageData($pageLink){
-		$currPage = strtolower(getPageName());
+	function getCurrentPageData($pageLink, $currURL){
+		$currPage = strtolower(getPageName($currURL));
 		$pageQuery = "SELECT m.* FROM tmodule m WHERE m.module_pageurl = '$currPage'";
 		if ($pageResult = $pageLink->query($pageQuery)){
 			if ($pageResult->num_rows > 0){
 				$pageRow = $pageResult->fetch_row();
 				$pageData = array(
-					'id' => $row[0],
-					'name' => $row[1],
-					'category' => $row[2],
-					'description' => $row[3],
-					'pageurl' => $row[4],
-					'issub' => $row[5],
-					'hascrud' => $row[6],
+					'id' => $pageRow[0],
+					'name' => $pageRow[1],
+					'category' => $pageRow[2],
+					'description' => $pageRow[3],
+					'pageurl' => $pageRow[4],
+					'issub' => $pageRow[5],
+					'hascrud' => $pageRow[6],
 				);
 				$pageResult->free();
 				return $pageData;
@@ -28,6 +28,29 @@
 		else{
 			printf("Errormessage: %s\n", $pageLink->error);
 		}
+	}
+	
+	function setAccessSession($accessLink, $accessLevel){
+		$accessData = array();
+		$accessQuery = "SELECT m.module_id, a.access_create, a.access_read, a.access_update, a.access_delete
+							 FROM tmodule m
+							 LEFT JOIN tlevel_access a ON a.module_id = m.module_id
+							 WHERE a.level_id = '$accessLevel'
+							";
+		if ($accessResult = $accessLink->query($accessQuery)){
+			if ($accessResult->num_rows > 0){
+				while ($accessRow = $accessResult->fetch_assoc()){
+					$accessData[$accessRow['module_id']] = array(
+						'create' =>$accessRow['access_create'],
+						'read' =>$accessRow['access_read'],
+						'update' =>$accessRow['access_update'],
+						'delete' =>$accessRow['access_delete'],
+					);
+				}
+				$accessResult->free();
+			}
+		}
+		$_SESSION['access'] = $accessData;
 	}
 	
 	function addLog($mysqli_link, $user_id, $log_name, $log_reference, $log_action){

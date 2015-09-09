@@ -7,7 +7,7 @@
 	if (isset($_POST)){
 		$go = true;
 		$flogin = $_SESSION['login'];
-		$fcurrpage = getCurrentPageData($mysqli);
+		$fcurrpage = getCurrentPageData($mysqli, $_SERVER['HTTP_REFERER']);
 		$fid = $mysqli->real_escape_string(strtoupper($flogin['user_id']));
 		$fdate = date('Y-m-d H:i:s');
 		if ($_POST['hidden']['command']=="submit"){
