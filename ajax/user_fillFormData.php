@@ -4,9 +4,8 @@
 	$alert = array();
 	$isSuccess = true;
 	$data;
-	if (isset($_POST))
-	{
-		$fid = $mysqli->real_escape_string(strtoupper($_POST['id']));
+	if (isset($_POST)){
+		$fid = $mysqli->real_escape_string($_POST['id']);
 		$query = "SELECT u.user_id, u.user_name, u.user_completename, l.level_name
 							FROM tuser u
 							LEFT JOIN tuser_level l ON l.level_id = u.level_id
@@ -25,6 +24,13 @@
 				);
 				$isSuccess = false;
 			}
+		}
+		else{
+			$alert[] = array(
+				'type' => 'danger',
+				'message' => "Errormessage: ".$mysqli->error,
+			);
+			$isSuccess = false;
 		}
 	}
 	else{

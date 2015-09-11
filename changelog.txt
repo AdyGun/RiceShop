@@ -1,8 +1,17 @@
 Change Log:
+v0.7.5
+-new Debt Transaction (CRUD, DataTable, and All form cosmetics working)
+-new bootstrap-toggle plugins 
+-new ScriptCam plugins
+-fixed a lot of bugs
+-fixed several global Function functionality
+-change getCurrentPageURL method on all ajax pages
+
 v0.7.4
 -add select2 plugins css and js
 -change Form title on all page
 -fixed missing variable when submiting Form on page supplier
+
 v0.7.3
 -new SESSION['access'] to store user's access right for accessing a page
 -implemented new access feature to user_level, supplier, user, and module page
@@ -10,6 +19,7 @@ v0.7.3
 -add default parameter on function getPageName
 -fixed function getCurrentPageData bug
 -fixed module list checkbox behaviour on page user_level
+
 v0.7.2
 -new user_level access feature
 -add new field 'hascrud' to table module 

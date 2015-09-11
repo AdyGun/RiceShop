@@ -11,7 +11,7 @@
 		);
 		$frecord = 10;
 		$fpage = intval($_POST['page']) - 1;
-		$fsearch = $mysqli->real_escape_string(strtoupper($_POST['search']));
+		$fsearch = $mysqli->real_escape_string($_POST['search']);
 		
 		$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
 		$fcondition = "m.module_id LIKE '%$fsearch%' OR

@@ -5,8 +5,9 @@
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
-		$fcurrpage = getCurrentPageData($mysqli, $_SERVER['HTTP_REFERER']);
-		$fcommand = $_POST['hidden']['command'];
+		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
+		$fcurrpage = getCurrentPageData($mysqli, $fhref);
+		$fcommand = $mysqli->real_escape_string($_POST['hidden']['command']);
 		/* Checking Access Rights */
 		if (($fcommand == 'create' && $_SESSION['access'][$fcurrpage['id']]['create'] == 1) 
 		|| ($fcommand == 'update' && $_SESSION['access'][$fcurrpage['id']]['update'] == 1)

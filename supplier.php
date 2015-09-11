@@ -64,6 +64,7 @@
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
 						$('#table_data_list tbody').append('<tr><td colspan="7">Supplier tidak ditemukan</td></tr>');
+						$('#table_data_paging').html('');
 					}
 					else{
 						/* Table Data */
@@ -254,6 +255,7 @@
 							} 
 						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
+						<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
@@ -290,7 +292,7 @@
 					</div>
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
-							<tr>
+							<tr class="info">
 								<th>Kode</th>
 								<th>Nama</th>
 								<th>Alamat</th>

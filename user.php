@@ -64,6 +64,7 @@
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
 						$('#table_data_list tbody').append('<tr><td colspan="4">User tidak ditemukan</td></tr>');
+						$('#table_data_paging').html('');
 					}
 					else{
 						/* Table Data */
@@ -238,6 +239,7 @@
 							} 
 						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
+						<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
@@ -274,7 +276,7 @@
 					</div>
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
-							<tr>
+							<tr class="info">
 								<th>Nama Login</th>
 								<th>Nama Lengkap</th>
 								<th>Level User</th>

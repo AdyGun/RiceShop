@@ -5,12 +5,14 @@
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
-		$go = true;
+		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
+		$fcurrpage = getCurrentPageData($mysqli, $fhref);
 		$flogin = $_SESSION['login'];
-		$fcurrpage = getCurrentPageData($mysqli, $_SERVER['HTTP_REFERER']);
+		$fcommand = $mysqli->real_escape_string($_POST['hidden']['command']);
+		$go = true;
 		$fid = $mysqli->real_escape_string(strtoupper($flogin['user_id']));
 		$fdate = date('Y-m-d H:i:s');
-		if ($_POST['hidden']['command']=="submit"){
+		if ($fcommand == 'submit'){
 			$foldpass = $mysqli->real_escape_string($_POST['input']['oldpassword']);
 			$tempoldpass = sha1(md5($foldpass));
 			$fnewpass = $mysqli->real_escape_string($_POST['input']['newpassword']);

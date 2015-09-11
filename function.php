@@ -6,9 +6,8 @@
 		return $realurl[0];
 	}
 	
-	function getCurrentPageData($pageLink, $currURL){
-		$currPage = strtolower(getPageName($currURL));
-		$pageQuery = "SELECT m.* FROM tmodule m WHERE m.module_pageurl = '$currPage'";
+	function getCurrentPageData($pageLink, $pageURL){
+		$pageQuery = "SELECT m.* FROM tmodule m WHERE m.module_pageurl = '$pageURL'";
 		if ($pageResult = $pageLink->query($pageQuery)){
 			if ($pageResult->num_rows > 0){
 				$pageRow = $pageResult->fetch_row();

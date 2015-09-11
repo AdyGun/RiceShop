@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.7.4
+          <b>Version</b> 0.8.0
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>
@@ -15,6 +15,8 @@
 		
     <!-- jQuery UI 1.11.4 -->
     <script src="plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
+		<!-- SWFObject -->
+    <script src="plugins/swfobject/swfobject.js" type="text/javascript"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script type="text/javascript">
       $.widget.bridge('uibutton', $.ui.button);
@@ -22,7 +24,7 @@
     <!-- Bootstrap 3.3.2 JS -->
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- Moment -->
-    <script src="plugins/moment/moment.min.js" type="text/javascript"></script>
+    <script src="plugins/moment/moment.js" type="text/javascript"></script>
     <!-- daterangepicker -->
     <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <!-- datepicker -->
@@ -36,6 +38,11 @@
     <script src="plugins/autonumeric/autoNumeric-1.9.39-min.js" type="text/javascript"></script>
 		<!-- Select2 -->
     <script src="plugins/select2/select2.full.min.js" type="text/javascript"></script>
+    <script src="plugins/select2/i18n/id.js" type="text/javascript"></script>
+		<!-- Bootstrap Toggle -->
+    <script src="plugins/bootstrap-toggle/js/bootstrap-toggle.min.js" type="text/javascript"></script>
+		<!-- ScriptCam -->
+    <script src="plugins/ScriptCam/scriptcam.min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
 		<!-- Bootstrap Validator -->
