@@ -3,41 +3,26 @@
 	include 'function.php';
 
 	$pagename = strtolower(getPageName());
-	$pagedata;
+	$pagedata = array();
 	if ($pagename != '404.php'){
 		if (isset($_SESSION["login"])){
 			/* Privilege Check */
-			$login = $mysqli->real_escape_string($_SESSION['login']['user_id']);
-			$query = "SELECT m.module_id, m.module_category, m.module_name
-								FROM tlevel_access l
-								INNER JOIN tmodule m ON l.module_id=m.module_id	
-								INNER JOIN tuser u ON u.level_id=l.level_id						
-								WHERE m.module_pageurl = '$pagename' AND u.user_id = '$login'
-							 ";
-			if ($result = $mysqli->query($query)){
-				if ($result->num_rows > 0){
-					$row = $result->fetch_row();
-					$fpageid = $row[0];
-					$pagedata = array(
-						'id' => $row[0],
-						'category' => $row[1],
-						'name' => $row[2],
-					);
-					$result->free();
+			$fuser_id = $mysqli->real_escape_string($_SESSION['login']['user_id']);
+			$privCheck = privilegeCheck($mysqli, $pagename, $fuser_id);
+			if ($privCheck['result'] == 'success'){
+					$pagedata = $privCheck['data'];
+					$fpageid = $pagedata['id'];
 					$flogindate = date("Y-m-d H:i:s");
-					$query = "UPDATE tuser SET user_status = 'Online', module_id = '$fpageid', user_accessdate = '$flogindate' WHERE user_id='$login'";
+					$query = "UPDATE tuser SET user_status = 'Online', module_id = '$fpageid', user_accessdate = '$flogindate' WHERE user_id='$fuser_id'";
 					if (!$result = $mysqli->query($query)){
 						printf("Errormessage: %s\n", $mysqli->error);
 					}
-				}
-				else{
-					// if ($_SESSION["login"]!="CREATOR"){
-						header("Location: 404.php");
-					// }
-				}
+			}
+			else if ($privCheck['result'] == '404'){
+				header("Location: 404.php");
 			}
 			else{
-				printf("Errormessage: %s\n", $mysqli->error);
+				echo $privCheck['message'];
 			}
 		}
 		else{

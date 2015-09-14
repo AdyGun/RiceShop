@@ -1,5 +1,13 @@
 Change Log:
-v0.7.5
+v0.8.1
+-fixed Delete debt issue
+-fixed Create debt issue when no images directory exist
+-fixed bug when Submit Form 2 times in a row on User, User Level, and Module page
+-fixed validation message layout on Profile, User, and User Level page
+-add new function to check user privilege when accessing a page
+-add posting cancel feature for Debt Transaction
+
+v0.8.0
 -new Debt Transaction (CRUD, DataTable, and All form cosmetics working)
 -new bootstrap-toggle plugins 
 -new ScriptCam plugins

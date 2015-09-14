@@ -57,8 +57,6 @@
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
 				$('#box_input_form form input:not([disabled])').eq(0).focus();
-				$('#hidid').val('');
-				$('#hidname').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
 				$('#btndelete').addClass('hide');

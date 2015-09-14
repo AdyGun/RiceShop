@@ -6,6 +6,39 @@
 		return $realurl[0];
 	}
 	
+	function privilegeCheck($pcLink, $pcPagename, $pcUser){
+		$pcData = array(
+			'result' => 'success',
+			'data' => array(),
+			'message' => '',
+		);
+		$pcQuery = "SELECT m.module_id, m.module_category, m.module_name
+							FROM tlevel_access l
+							INNER JOIN tmodule m ON l.module_id=m.module_id	
+							INNER JOIN tuser u ON u.level_id=l.level_id						
+							WHERE m.module_pageurl = '$pcPagename' AND u.user_id = '$pcUser'
+						 ";
+		if ($pcResult = $pcLink->query($pcQuery)){
+			if ($pcResult->num_rows > 0){
+				$pcRow = $pcResult->fetch_row();
+				$pcData['data'] = array(
+					'id' => $pcRow[0],
+					'category' => $pcRow[1],
+					'name' => $pcRow[2],
+				);
+				$pcResult->free();
+			}
+			else{
+				$pcData['result'] = '404';
+			}
+		}
+		else{
+			$pcData['result'] = 'error';
+			$pcData['message'] = "Errormessage: ".$mysqli->error;
+		}
+		return $pcData;
+	}
+	
 	function getCurrentPageData($pageLink, $pageURL){
 		$pageQuery = "SELECT m.* FROM tmodule m WHERE m.module_pageurl = '$pageURL'";
 		if ($pageResult = $pageLink->query($pageQuery)){
@@ -52,11 +85,11 @@
 		$_SESSION['access'] = $accessData;
 	}
 	
-	function addLog($mysqli_link, $user_id, $log_name, $log_reference, $log_action){
+	function addLog($mysqli_link, $user_id, $log_name, $log_reference, $log_action, $log_description = ''){
 		//INSERT ACTIVITY LOG
 		$log_date = date("Y-m-d H:i:s");
-		$log_query = "INSERT INTO tlog (log_name, log_reference, log_action, log_date, user_id) VALUES 
-								  ('$log_name', '$log_reference', '$log_action', '$log_date','$user_id');";
+		$log_query = "INSERT INTO tlog (log_name, log_reference, log_action, log_date, log_description, user_id) VALUES 
+								  ('$log_name', '$log_reference', '$log_action', '$log_date', '$log_description','$user_id');";
 		if (!$log_result = $mysqli_link->query($log_query)){
 			printf("Errormessage: %s\n", $mysqli_link->error);
 		}
@@ -97,6 +130,10 @@
 			case "transaksi":
 				$iconName = 'laptop';
 				break;
+			case "batal posting":
+				$iconName = 'unlink';
+				break;
+				
 		}
 		return $iconName;
 	}

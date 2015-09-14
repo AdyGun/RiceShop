@@ -27,7 +27,6 @@
 				$('#box_input_form form input:not([disabled])').eq(0).focus();
 				$('#box_input_form form #radio_issub_no').prop('checked', true);
 				$('#box_input_form form #radio_hascrud_yes').prop('checked', true);
-				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
 				$('#btndelete').addClass('hide');

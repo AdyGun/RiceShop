@@ -25,7 +25,6 @@
 				validator.message.removeAll($('#box_input_form form'));
 				$('#box_input_form form').clearForm();
 				$('#box_input_form form input:not([disabled])').eq(0).focus();
-				$('.box-footer input[type="hidden"]').val('');
 				$('#btncreate').removeClass('hide');
 				$('#btnupdate').addClass('hide');
 				$('#btndelete').addClass('hide');
@@ -194,14 +193,14 @@
 								<div class="col-sm-4">
 									<input type="text" autofocus class="form-control" id="input_name" name="input[name]" maxlength="30">
 								</div>
-								<span class="help-block"></span>
+								<span class="help-block inline"></span>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label" for="input_completename">Nama Lengkap :</label>
 								<div class="col-sm-5">
 									<input type="text" class="form-control" id="input_completename" name="input[completename]" maxlength="40">
 								</div>
-								<span class="help-block"></span>
+								<span class="help-block inline"></span>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Level Akses :</label>

@@ -89,7 +89,7 @@
 										<label for="input_confirmpassword" class="col-sm-4 control-label">Konfirmasi Password Baru :</label>
 										<div class="col-sm-6">
 											<input type="password" class="form-control" id="input_confirmpassword" name="input[confirmpassword]">
-											<span class="help-block"></span>
+											<span class="help-block inline"></span>
 										</div>
 									</div>
 									<div class="form-group">

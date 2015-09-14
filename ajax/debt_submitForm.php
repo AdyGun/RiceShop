@@ -14,10 +14,10 @@
 		|| ($fcommand == 'update' && $_SESSION['access'][$fcurrpage['id']]['update'] == 1)
 		|| ($fcommand == 'delete' && $_SESSION['access'][$fcurrpage['id']]['delete'] == 1)){
 			$go = true;
+			$flogin = $_SESSION['login'];
 			$fid = $mysqli->real_escape_string(strtoupper($_POST['hidden']['id']));
 			$fdate = date('Y-m-d H:i:s');
 			if ($fcommand == 'create' || $fcommand == 'update'){
-				$flogin = $_SESSION['login'];
 				$fuser = $flogin['user_id'];
 				$ftempdate = date_create_from_format('Y-m-d',$mysqli->real_escape_string($_POST['hidden']['date']));
 				$fsupplier = $mysqli->real_escape_string($_POST['input']['supplier']);
@@ -59,6 +59,10 @@
 					// Convert Photo String to JPG
 					$photoData = base64_decode($photoString);
 					$photoSource = imagecreatefromstring($photoData);
+					// Create Image Directory
+					if (!file_exists('../images/debt')) {
+							mkdir('../images/debt', 0777, true);
+					}
 					// Convert DateTime to String
 					$fdebtdate = $ftempdate->format('Y-m-d');
 					if ($fcommand=='create'){
