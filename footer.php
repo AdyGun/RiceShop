@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.8.1
+          <b>Version</b> 0.8.2
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>
@@ -51,5 +51,8 @@
     <script src="myscript/helper.js" type="text/javascript"></script>
     <script src="myscript/jquery.hack.js" type="text/javascript"></script>
     <script src="myscript/validator.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			moment.locale('id');
+		</script>
   </body>
 </html>

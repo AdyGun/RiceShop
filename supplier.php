@@ -75,7 +75,7 @@
 							tabContent += '<td>'+tabledata[i].supplier_name+'</td>';
 							tabContent += '<td>'+tabledata[i].supplier_address+'</td>';
 							tabContent += '<td>'+tabledata[i].supplier_city+'</td>';
-							tabContent += '<td class="auto-numeric">'+tabledata[i].supplier_phone+'</td>';
+							tabContent += '<td class="table-autonumeric">'+tabledata[i].supplier_phone+'</td>';
 							tabContent += '<td>'+tabledata[i].supplier_description+'</td>';
 							tabContent += '<td>';
 							tabContent += 	'<div class="btn-group">';
@@ -102,7 +102,7 @@
 							refreshDataTable($('#input_search').val(), $(this).attr('data-mx-page'));
 						});
 					}
-					$('.auto-numeric').autoNumeric('init', {aSep: '', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'keep'});
+					$('.table-autonumeric').autoNumeric('init', {aSep: '', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'keep'});
 				}
 			});
 		}
@@ -166,6 +166,7 @@
 				e.preventDefault();
 				refreshDataTable($(this).val(), 1);
 			});
+			$('.form-autonumeric').autoNumeric('init', {aSep: '', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'keep'});
 			/* Form Validator */
 			$('#input_name').blur(function(){
 				if ($('#hidcommand').val() == 'create')
@@ -231,7 +232,7 @@
 							<div class="form-group">
 								<label for="input_phone" class="col-sm-4 control-label">Telpon :</label>
 								<div class="col-sm-5">
-									<input type="text" class="form-control auto-numeric" id="input_phone" name="input[phone]" maxlength="30">
+									<input type="text" class="form-control form-autonumeric" id="input_phone" name="input[phone]" maxlength="30">
 								</div>
 							</div>
 							<div class="form-group">

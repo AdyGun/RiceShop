@@ -1,4 +1,9 @@
 Change Log:
+v0.8.2
+-fixed debt nominal form-validation bug
+-db: change tdebt table from debt_capturepath to debt_imageblob
+-debt image capture now save into database instead of create image file
+
 v0.8.1
 -fixed Delete debt issue
 -fixed Create debt issue when no images directory exist

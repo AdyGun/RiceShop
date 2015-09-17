@@ -1,6 +1,11 @@
 <?php include('header.php'); ?>
 
-	<script type="text/javascript">		
+	<script type="text/javascript">
+		function doValidation(){
+			$('#input_supplier').trigger('select2:close');
+			$('#modal_webcam').trigger('hidden.bs.modal');
+			$('#input_date, #input_nominal').blur();
+		}
 		function doPostTransaction(content, command){
 			$.ajax({
 				url: 'ajax/global_postTransaction.php',
@@ -71,6 +76,7 @@
 						return false;
 				}
 				else{
+					doValidation();
 					if (!validator.validCheck($('#box_input_form form')))
 						return false;
 				}
@@ -111,7 +117,7 @@
 							tabContent += '<td>['+tabledata[i].supplier_id+'] '+tabledata[i].supplier_name+'</td>';
 							tabContent += '<td>'+tabledata[i].user_name+'</td>';
 							tabContent += '<td>'+tabledata[i].debt_description+'</td>';
-							tabContent += '<td>Rp <span class="auto-numeric">'+tabledata[i].debt_nominal+'</span></td>';
+							tabContent += '<td>Rp <span class="table-autonumeric">'+tabledata[i].debt_nominal+'</span></td>';
 							tabContent += '<td>';
 							if (contStatus == 'pending'){
 								tabContent += 	'<div class="btn-group">';
@@ -139,7 +145,7 @@
 							refreshDataTable($('#input_search').val(), $(this).attr('data-mx-page'), $('#hidpostedpending').val());
 						});
 					}
-					$('.auto-numeric').autoNumeric('init', {aSep: '.', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'deny'});
+					$('.table-autonumeric').autoNumeric('init', {aSep: '.', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'deny'});
 				}
 			});
 		}
@@ -177,8 +183,7 @@
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							
-							$('#input_name, #input_completename').blur();
+							doValidation();
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
@@ -199,7 +204,6 @@
 			alert(errorMsg);
 		}
 		$(document).ready(function(){
-			moment.locale('id');
 			refreshDataTable($('#input_search').val(), 1, $('#hidpostedpending').val());
 			$('#box_input_form .box-footer button[data-mx-command]').click(function(e){
 				e.preventDefault();
@@ -260,6 +264,7 @@
 					format: 'DD, d MM yyyy',
 					endDate: '1d',
 			}).datepicker('setDate', Date());
+			$('.form-autonumeric').autoNumeric('init', {aSep: '.', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'deny'});
 			/* Form Validator */
 			$('#input_supplier').on('select2:close', function(){
 				if ($(this).val() == 0){
@@ -280,7 +285,7 @@
 				}
 			});
 			$('#input_nominal').blur(function(){
-				if ($(this).autoNumeric < 1){
+				if ($(this).autoNumeric('get') < 1){
 					validator.message.add($(this).parents('.form-group'), 'error', 'Nominal utang harus lebih dari 0!');
 				}
 				else{
@@ -431,7 +436,7 @@
 								<div class="col-sm-5">
 									<div class="input-group">
 										<span class="input-group-addon">Rp</span>
-										<input type="text" class="form-control auto-numeric" id="input_nominal" name="input[nominal]" maxlength="20">
+										<input type="text" class="form-control form-autonumeric" id="input_nominal" name="input[nominal]" maxlength="20" value="0">
 										<input type="hidden" id="hidnominal" name="hidden[nominal]">
 									</div>
 									<span class="help-block inline"></span>

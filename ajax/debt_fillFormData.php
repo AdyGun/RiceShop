@@ -6,7 +6,7 @@
 	$data = array();
 	if (isset($_POST)){
 		$fid = $mysqli->real_escape_string($_POST['id']);
-		$query = "SELECT d.debt_id, d.debt_date, d.debt_description, d.debt_nominal, s.supplier_id, s.supplier_name, u.user_id, u.user_name
+		$query = "SELECT d.debt_id, d.debt_date, d.debt_description, d.debt_nominal, s.supplier_id, s.supplier_name, u.user_id, u.user_name, d.debt_imageblob
 							FROM tdebt d
 							LEFT JOIN tsupplier s ON s.supplier_id = d.supplier_id
 							LEFT JOIN tuser u ON u.user_id = d.user_id
@@ -16,8 +16,6 @@
 			if ($result->num_rows > 0){
 				$row = $result->fetch_row();
 				$data = $row;
-				$imageDataEncoded = base64_encode(@file_get_contents('../images/debt/'.$fid.'.jpg'));
-				$data[8] = $imageDataEncoded;
 				$result->free();
 			}
 			else{

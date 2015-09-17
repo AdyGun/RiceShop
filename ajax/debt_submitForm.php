@@ -23,7 +23,7 @@
 				$fsupplier = $mysqli->real_escape_string($_POST['input']['supplier']);
 				$fdescription = $mysqli->real_escape_string($_POST['input']['description']);
 				$fnominal = intval($mysqli->real_escape_string($_POST['hidden']['nominal']));
-				$photoString = $mysqli->real_escape_string($_POST['hidden']['photo']);
+				$fphoto = $mysqli->real_escape_string($_POST['hidden']['photo']);
 				$fstatus = 'pending';
 				/* Checking Validation */
 				if ($ftempdate->format('Y-m-d') > date('Y-m-d')){
@@ -40,7 +40,7 @@
 					);
 					$go = false;
 				}
-				if ($photoString == ''){
+				if ($fphoto == ''){
 					$alert[] = array(
 						'type' => 'danger',
 						'message' => 'Foto masih kosong!',
@@ -56,18 +56,10 @@
 				}
 				/* Validation Success */
 				if ($go == true){
-					// Convert Photo String to JPG
-					$photoData = base64_decode($photoString);
-					$photoSource = imagecreatefromstring($photoData);
-					// Create Image Directory
-					if (!file_exists('../images/debt')) {
-							mkdir('../images/debt', 0777, true);
-					}
 					// Convert DateTime to String
 					$fdebtdate = $ftempdate->format('Y-m-d');
 					if ($fcommand=='create'){
 						$fid = autoGenerateID($mysqli, "DB".$ftempdate->format('ym'), "tdebt", "debt_id", 6);
-						$fphoto = 'images/debt/'.$fid.'.jpg';
 						$query = "INSERT INTO tdebt 
 											VALUES ('$fid',
 															'$fdebtdate',
@@ -84,7 +76,6 @@
 								'type' => 'success',
 								'message' => 'Utang baru telah ditambahkan.',
 							);
-							$photoSave = imagejpeg($photoSource,'../'.$fphoto,100);
 							// Insert Activity Log
 							addLog($mysqli,$flogin['user_id'],$fcurrpage['category'].' '.$fcurrpage['name'],$fid,'Tambah');
 						}
@@ -97,13 +88,13 @@
 						}
 					}
 					else if ($fcommand=='update'){
-						$fphoto = 'images/debt/'.$fid.'.jpg';
 						$query = "UPDATE tdebt SET 
 												debt_date='$fdebtdate',						
 												supplier_id='$fsupplier',
 												user_id='$fuser',
 												debt_description='$fdescription',
 												debt_nominal=$fnominal,
+												debt_imageblob='$fphoto',
 												debt_status='$fstatus'
 											WHERE debt_id='$fid'";
 						if ($result = $mysqli->query($query)){
@@ -111,10 +102,6 @@
 								'type' => 'success',
 								'message' => 'Data Utang berhasil diubah.',
 							);
-							$imageDataEncoded = base64_encode(@file_get_contents($fphoto));
-							if ($imageDataEncoded != $photoString){
-								$photoSave = imagejpeg($photoSource,'../'.$fphoto,100);
-							}
 							// Insert Activity Log
 							addLog($mysqli,$flogin['user_id'],$fcurrpage['category'].' '.$fcurrpage['name'],$fid,'Ubah');
 						}
@@ -126,7 +113,7 @@
 							$isSuccess = false;
 						}
 					}
-					imagedestroy($photoSource);
+					// imagedestroy($photoSource);
 				}
 				else{
 					$isSuccess = false;
