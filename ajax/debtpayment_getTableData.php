@@ -4,9 +4,9 @@
 	
 	$alert = array();
 	$isSuccess = true;
-	$data;
+	$data = array();
 	if (isset($_POST)){
-		$fhref = 'user.php';
+		$fhref = 'debt_payment.php';
 		$fcurrpage = getCurrentPageData($mysqli, $fhref);
 		if ($_SESSION['access'][$fcurrpage['id']]['read'] == 1){
 			$data = array(
@@ -16,29 +16,43 @@
 			$frecord = 10;
 			$fpage = intval($mysqli->real_escape_string($_POST['search']['currentpage'])) - 1;
 			$fsearch = $mysqli->real_escape_string($_POST['search']['text']);
+			if (isset($_POST['search']['status']))
+				$fstatus = $mysqli->real_escape_string($_POST['search']['status']);
+			else
+				$fstatus = 'posted';
 			
 			$flimit = "LIMIT ".($frecord*$fpage).", $frecord";
-			$fcondition = "(u.user_name LIKE '%$fsearch%' OR
-											u.user_completename LIKE '%$fsearch%' OR
-											l.level_name LIKE '%$fsearch%') AND
-											u.user_deletedate IS NULL 
+			$fcondition = "(p.debtpayment_id LIKE '%$fsearch%' OR
+											DATE_FORMAT(p.debtpayment_date,'%d-%m-%Y') LIKE '%$fsearch%' OR
+											d.debt_id LIKE '%$fsearch%' OR
+											u.user_name LIKE '%$fsearch%' OR
+											u.user_id LIKE '%$fsearch%' OR
+											p.debtpayment_nominal LIKE '%$fsearch%' OR
+											p.debtpayment_description LIKE '%$fsearch%') AND
+											p.debtpayment_status = '$fstatus' AND
+											p.debtpayment_deletedate IS NULL
 										";
+
 			/* Table Data Query */
-			$query = "SELECT u.user_id, u.user_name, u.user_completename, l.level_name 
-								FROM tuser u
-								LEFT JOIN tuser_level l ON l.level_id = u.level_id
+			$query = "SELECT p.*, u.user_id, u.user_name, d.debt_id
+								FROM tdebtpayment p
+								LEFT JOIN tdebt d ON d.debt_id = p.debt_id
+								LEFT JOIN tuser u ON u.user_id = p.user_id
 								WHERE $fcondition
-								ORDER BY u.user_id ASC
+								ORDER BY p.debtpayment_id ASC
 								$flimit
 							 ";
 			if ($result = $mysqli->query($query)){
 				if ($result->num_rows > 0){
 					while ($row = $result->fetch_assoc()){
 						$newRow = array(
+							'debtpayment_id' => $row['debtpayment_id'],
+							'debtpayment_date' => $row['debtpayment_date'],
+							'debt_id' => $row['debt_id'],
 							'user_id' => $row['user_id'],
 							'user_name' => $row['user_name'],
-							'user_completename' => $row['user_completename'],
-							'level_name' => $row['level_name'],
+							'debtpayment_description' => $row['debtpayment_description'],
+							'debtpayment_nominal' => $row['debtpayment_nominal'],
 						);
 						$data['tabledata'][] = $newRow;
 					}
@@ -56,9 +70,10 @@
 				$isSuccess = false;
 			}
 			/* Paging Query */
-			$query = "SELECT COUNT(u.user_id) as recordcount
-								FROM tuser u
-								LEFT JOIN tuser_level l ON l.level_id = u.level_id
+			$query = "SELECT COUNT(p.debtpayment_id) as recordcount
+								FROM tdebtpayment p
+								LEFT JOIN tdebt d ON d.debt_id = p.debt_id
+								LEFT JOIN tuser u ON u.user_id = p.user_id
 								WHERE $fcondition
 							 ";
 			if ($result = $mysqli->query($query)){

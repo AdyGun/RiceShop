@@ -85,7 +85,6 @@
 					<div class="box-footer">
 						<button type="submit" data-mx-command="submit" id="btnsubmit" class="btn btn-primary">Proses</button>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
-						<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 					</div>
 				</form>

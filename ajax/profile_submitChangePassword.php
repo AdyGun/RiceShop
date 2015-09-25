@@ -5,7 +5,7 @@
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
-		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
+		$fhref = 'profile.php';
 		$fcurrpage = getCurrentPageData($mysqli, $fhref);
 		$flogin = $_SESSION['login'];
 		$fcommand = $mysqli->real_escape_string($_POST['hidden']['command']);

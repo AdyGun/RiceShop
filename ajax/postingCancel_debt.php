@@ -5,10 +5,9 @@
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
+		$fhref = 'cancel_debt.php';
 		$flogin = $_SESSION['login'];
-		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
-		$currpagename = getPageName($fhref);
-		$privCheck = privilegeCheck($mysqli, $currpagename, $flogin['user_id']);
+		$privCheck = privilegeCheck($mysqli, $fhref, $flogin['user_id']);
 		if ($privCheck['result'] == 'success'){
 			$go = true;
 			$currpagedata = $privCheck['data'];

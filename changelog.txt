@@ -1,4 +1,13 @@
 Change Log:
+v0.9.0
+-new Debt Payment Transaction (CRUD, DataTable, and All form cosmetics working)
+-change data-table search method on all page
+-remove User field on form Debt Transaction
+-supplier delete now just change the deletedate field
+-add DebtRemaining column on Debt Table
+-fixed form-validation method on all page
+-fixed bug when deleting Debt data
+
 v0.8.2
 -fixed debt nominal form-validation bug
 -db: change tdebt table from debt_capturepath to debt_imageblob

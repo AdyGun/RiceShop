@@ -1,6 +1,9 @@
 <?php include('header.php'); ?>
 
-	<script type="text/javascript">		
+	<script type="text/javascript">
+		function doValidation(){
+			$('#input_name, #input_category, #input_pageurl').blur();
+		}
 		function submitAjaxForm(){
 			$.ajax({                                      
 				url: 'ajax/module_submitForm.php',                  
@@ -15,7 +18,7 @@
 					helper.showAlertMessage(result.alert);
 					if (result.type){
 						doCommand('cancel');
-						refreshDataTable($('#hidsearch').val(), $('#hidcurrentpage').val());
+						refreshDataTable();
 					}
 				}
 			});			
@@ -38,6 +41,7 @@
 						return false;
 				}
 				else{
+					doValidation();
 					if (!validator.validCheck($('#box_input_form form')))
 						return false;
 				}
@@ -45,22 +49,17 @@
 				submitAjaxForm();
 			}
 		}
-		function refreshDataTable(contSearch, contPage){
+		function refreshDataTable(){
 			$.ajax({
 				url: 'ajax/module_getTableData.php',
 				type: 'post',
-				data: {
-					page: contPage,
-					search: contSearch
-				},
+				data: $('#box_table_list form').serialize(),
 				dataType: 'json',
 				beforeSend: function(){
 					helper.showBoxLoading('#box_table_list');
 				},
 				success: function(result){
 					helper.removeBoxLoading('#box_table_list');
-					$('#hidsearch').val(contSearch);
-					$('#hidcurrentpage').val(contPage);
 					$('#table_data_list tbody tr').remove();
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
@@ -98,10 +97,11 @@
 						});
 						/* Table Paging */
 						var totalpage = result.data.totalpage;
-						$('#table_data_paging').html(helper.createPaginationBar(contPage, totalpage));
+						$('#table_data_paging').html(helper.createPaginationBar($('#hidcurrentpage').val(), totalpage));
 						$('#table_data_paging .pagination li:not(.active,.disabled,[data-mx-disabled]) a').click(function(e){
 							e.preventDefault();
-							refreshDataTable($('#input_search').val(), $(this).attr('data-mx-page'));
+							$('#hidcurrentpage').val($(this).attr('data-mx-page'));
+							refreshDataTable();
 						});
 					}
 				}
@@ -148,7 +148,7 @@
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							$('#input_name, #input_category, #input_pageurl').blur();
+							doValidation();
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
@@ -159,7 +159,7 @@
 			});
 		}
 		$(document).ready(function(){
-			refreshDataTable($('#input_search').val(), 1);
+			refreshDataTable();
 			$('#box_input_form .box-footer button[data-mx-command]').click(function(e){
 				e.preventDefault();
 				doCommand($(this).attr('data-mx-command'));
@@ -167,12 +167,12 @@
 			$('#input_search').keypress(function(e){
 				if(e.which == 13) {
 					e.preventDefault();
-					refreshDataTable($(this).val(), 1);
+					refreshDataTable();
 				}
 			});
 			$('#btnsearch').click(function(e){
 				e.preventDefault();
-				refreshDataTable($(this).val(), 1);
+				refreshDataTable();
 			});
 			/* Form Validator */
 			$('#input_name').blur(function(){
@@ -287,7 +287,6 @@
 							} 
 						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
-						<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
@@ -306,14 +305,13 @@
 					</div>
 				</div><!-- /.box-header -->
 				<div class="box-body">
-					<div class="form-horizontal">
+					<form class="form-horizontal">
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Cari :</label>
 							<div class="col-sm-4">
 								<div class="input-group">
-									<input type="text" id="input_search" class="form-control" />
-									<input type="hidden" id="hidsearch">
-									<input type="hidden" id="hidcurrentpage">
+									<input type="text" id="input_search" class="form-control" name="search[text]" value="" />
+									<input type="hidden" id="hidcurrentpage" name="search[currentpage]" value="1">
 									<span class="input-group-btn">
 										<span class="input-group-btn">
                       <button class="btn btn-info" type="button" id="btnsearch"><i class="fa fa-search"></i></button>
@@ -322,7 +320,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
 							<tr class="info">

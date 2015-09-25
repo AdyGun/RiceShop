@@ -96,7 +96,6 @@
 										<div class="col-sm-offset-4 col-sm-10">
 											<button type="submit" data-mx-command="submit" class="btn btn-info"><i class="fa fa-refresh fa-spin hide"></i> Ganti Password</button>
 											<button type="clear" data-mx-command="cancel" class="btn btn-default">Batal</button>
-											<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 											<input type="hidden" id="hidcommand" name="hidden[command]">
 										</div>
 									</div>

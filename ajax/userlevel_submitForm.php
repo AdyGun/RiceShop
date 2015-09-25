@@ -5,7 +5,7 @@
 	$alert = array();
 	$isSuccess = true;
 	if (isset($_POST)){
-		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
+		$fhref = 'user_level.php';
 		$fcurrpage = getCurrentPageData($mysqli, $fhref);
 		$fcommand = $mysqli->real_escape_string($_POST['hidden']['command']);
 		/* Checking Access Rights */

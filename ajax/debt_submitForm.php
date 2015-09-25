@@ -6,7 +6,7 @@
 	$isSuccess = true;
 	$fid = '';
 	if (isset($_POST)){
-		$fhref = $mysqli->real_escape_string($_POST['hidden']['href']);
+		$fhref = 'debt.php';
 		$fcurrpage = getCurrentPageData($mysqli, $fhref);
 		$fcommand = $mysqli->real_escape_string($_POST['hidden']['command']);
 		/* Checking Access Rights */
@@ -113,14 +113,13 @@
 							$isSuccess = false;
 						}
 					}
-					// imagedestroy($photoSource);
 				}
 				else{
 					$isSuccess = false;
 				}
 			}
 			if ($fcommand=='delete'){
-				$query = "UPDATE tdebt SET debt_deletedate='$fdate' WHERE user_id='$fid'";
+				$query = "UPDATE tdebt SET debt_deletedate='$fdate' WHERE debt_id='$fid'";
 				if ($result = $mysqli->query($query)){
 					$alert[] = array(
 						'type' => 'success',

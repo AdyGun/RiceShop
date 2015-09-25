@@ -26,7 +26,7 @@
 				success: function(result){
 					helper.removeBoxLoading('#box_input_form');
 					helper.showAlertMessage(result.alert);
-					refreshDataTable($('#hidsearch').val(), $('#hidcurrentpage').val(), $('#hidpostedpending').val());
+					refreshDataTable();
 				}
 			});
 		}
@@ -51,7 +51,7 @@
 							doPostTransaction(result.id, $('#hidcommand').val());
 						}
 						else{
-							refreshDataTable($('#hidsearch').val(), $('#hidcurrentpage').val(), $('#hidpostedpending').val());
+							refreshDataTable();
 						}
 					}
 				}
@@ -69,6 +69,7 @@
 				$('#hidphoto').val('');
 				$('#input_date').datepicker('setDate', Date());
 				$('#input_supplier').val(0).trigger('change');
+				$('#input_nominal').autoNumeric('set', 0);
 			}
 			else{				
 				if (command == 'delete'){
@@ -84,27 +85,21 @@
 				submitAjaxForm();
 			}
 		}
-		function refreshDataTable(contSearch, contPage, contStatus){
+		function refreshDataTable(){
 			$.ajax({
 				url: 'ajax/debt_getTableData.php',
 				type: 'post',
-				data: {
-					page: contPage,
-					search: contSearch,
-					status: contStatus,
-				},
+				data: $('#box_table_list form').serialize(),
 				dataType: 'json',
 				beforeSend: function(){
 					helper.showBoxLoading('#box_table_list');
 				},
 				success: function(result){
 					helper.removeBoxLoading('#box_table_list');
-					$('#hidsearch').val(contSearch);
-					$('#hidcurrentpage').val(contPage);
 					$('#table_data_list tbody tr').remove();
 					if (!result.type){
 						helper.showAlertMessage(result.alert);
-						$('#table_data_list tbody').append('<tr><td colspan="7">Utang tidak ditemukan</td></tr>');
+						$('#table_data_list tbody').append('<tr><td colspan="8">Utang tidak ditemukan</td></tr>');
 						$('#table_data_paging').html('');
 					}
 					else{
@@ -117,9 +112,15 @@
 							tabContent += '<td>['+tabledata[i].supplier_id+'] '+tabledata[i].supplier_name+'</td>';
 							tabContent += '<td>'+tabledata[i].user_name+'</td>';
 							tabContent += '<td>'+tabledata[i].debt_description+'</td>';
-							tabContent += '<td>Rp <span class="table-autonumeric">'+tabledata[i].debt_nominal+'</span></td>';
+							tabContent += '<td class="table-autonumeric">'+tabledata[i].debt_nominal+'</td>';
+							if (tabledata[i].debtremain == 0){
+								tabContent += '<td><span class="label label-success table-autonumeric">LUNAS</span></td>';
+							}
+							else{
+								tabContent += '<td><span class="label label-danger table-autonumeric">'+tabledata[i].debtremain+'</span></td>';
+							}
 							tabContent += '<td>';
-							if (contStatus == 'pending'){
+							if ($('#hidstatus').val() == 'pending'){
 								tabContent += 	'<div class="btn-group">';
 								tabContent += 		'<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">';
 								tabContent += 			'<span class="caret"></span>';
@@ -139,13 +140,14 @@
 						});
 						/* Table Paging */
 						var totalpage = result.data.totalpage;
-						$('#table_data_paging').html(helper.createPaginationBar(contPage, totalpage));
+						$('#table_data_paging').html(helper.createPaginationBar($('#hidcurrentpage').val(), totalpage));
 						$('#table_data_paging .pagination li:not(.active,.disabled,[data-mx-disabled]) a').click(function(e){
 							e.preventDefault();
-							refreshDataTable($('#input_search').val(), $(this).attr('data-mx-page'), $('#hidpostedpending').val());
+							$('#hidcurrentpage').val($(this).attr('data-mx-page'));
+							refreshDataTable();
 						});
 					}
-					$('.table-autonumeric').autoNumeric('init', {aSep: '.', aDec: ' ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'deny'});
+					$('.table-autonumeric').autoNumeric('init', {aSep: '.', aDec: ' ', aSign: 'Rp ', vMax: '99999999999999999999', mDec: '99', aPad: false, lZero: 'deny'});
 				}
 			});
 		}
@@ -155,6 +157,7 @@
 				type: 'post',
 				data: {
 					id: content,
+					status: 'pending',
 				},        
 				dataType: 'json',         
 				beforeSend: function(){
@@ -178,8 +181,7 @@
 							$('#input_supplier').append('<option value="'+result.data[4]+'">['+result.data[4]+'] '+result.data[5]+'</option>')
 						}
 						$('#input_supplier').val(result.data[4]).trigger('change');
-						$('#input_user').val(result.data[7]);
-						$('#input_photo').val(result.data[8]);
+						$('#input_photo').val(result.data[6]);
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
@@ -204,7 +206,7 @@
 			alert(errorMsg);
 		}
 		$(document).ready(function(){
-			refreshDataTable($('#input_search').val(), 1, $('#hidpostedpending').val());
+			refreshDataTable();
 			$('#box_input_form .box-footer button[data-mx-command]').click(function(e){
 				e.preventDefault();
 				doCommand($(this).attr('data-mx-command'));
@@ -212,12 +214,12 @@
 			$('#input_search').keypress(function(e){
 				if(e.which == 13) {
 					e.preventDefault();
-					refreshDataTable($(this).val(), 1, $('#hidpostedpending').val());
+					refreshDataTable();
 				}
 			});
 			$('#btnsearch').click(function(e){
 				e.preventDefault();
-				refreshDataTable($(this).val(), 1, $('#hidpostedpending').val());
+				refreshDataTable();
 			});
 			$('#btn_photo').click(function(e){
 				e.preventDefault();
@@ -227,12 +229,12 @@
 					$('#webcam_snapimg').removeAttr('src');
 				$('#modal_webcam').modal('show');
 			});
-			$('#cb_postedpending').change(function(e){
+			$('#cb_status').change(function(e){
 				if ($(this).prop('checked'))
-					$('#hidpostedpending').val('posted');
+					$('#hidstatus').val('posted');
 				else
-					$('#hidpostedpending').val('pending');
-				refreshDataTable($('#input_search').val(), $('#hidcurrentpage').val(), $('#hidpostedpending').val());
+					$('#hidstatus').val('pending');
+				refreshDataTable();
 			});
 			/* Form Cosmetics */
 			$('#input_supplier').select2({
@@ -387,7 +389,7 @@
 								<label for="input_date" class="col-sm-4 control-label">Tanggal :</label>
 								<div class="col-sm-7">
 									<div class="input-group">
-										<input type="text" class="form-control" id="input_date" name="input[date]" maxlength="30">
+										<input type="text" class="form-control" id="input_date" maxlength="30">
 										<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 										<input type="hidden" id="hiddate" name="hidden[date]" maxlength="30">
 									</div>
@@ -420,12 +422,6 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label for="input_user" class="col-sm-4 control-label">Operator :</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="input_user" name="input[user]" value="<?php echo $_SESSION['login']['user_name'] ?>" disabled>
-								</div>
-							</div>
-							<div class="form-group">
 								<label class="col-sm-4 control-label">Keterangan :</label>
 								<div class="col-sm-8">
 									<textarea class="form-control" rows="3" id="input_description" name="input[description]"></textarea>
@@ -436,7 +432,7 @@
 								<div class="col-sm-5">
 									<div class="input-group">
 										<span class="input-group-addon">Rp</span>
-										<input type="text" class="form-control form-autonumeric" id="input_nominal" name="input[nominal]" maxlength="20" value="0">
+										<input type="text" class="form-control form-autonumeric" id="input_nominal" maxlength="20" value="0">
 										<input type="hidden" id="hidnominal" name="hidden[nominal]">
 									</div>
 									<span class="help-block inline"></span>
@@ -457,7 +453,6 @@
 							} 
 						?>
 						<button type="clear" data-mx-command="cancel" id="btncancel" class="btn btn-default">Batal</button>
-						<input type="hidden" id="hidhref" name="hidden[href]" value="<?php echo $pagename; ?>">
 						<input type="hidden" id="hidcommand" name="hidden[command]">
 						<input type="hidden" id="hidid" name="hidden[id]">
 						<input type="hidden" id="hidname" name="hidden[name]">
@@ -475,16 +470,16 @@
 					</div>
 				</div><!-- /.box-header -->
 				<div class="box-body">
-					<div class="form-horizontal">
+					<form class="form-horizontal">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label class="col-sm-4 control-label">Cari :</label>
 									<div class="col-sm-8">
 										<div class="input-group">
-											<input type="text" id="input_search" class="form-control" />
-											<input type="hidden" id="hidsearch">
-											<input type="hidden" id="hidcurrentpage">
+											<input type="text" id="input_search" class="form-control" name="search[text]"/>
+											<input type="hidden" id="hidsearch"  value="">
+											<input type="hidden" id="hidcurrentpage" name="search[currentpage]" value="1">
 											<span class="input-group-btn">
 												<span class="input-group-btn">
 													<button class="btn btn-info" type="button" id="btnsearch"><i class="fa fa-search"></i></button>
@@ -498,13 +493,13 @@
 								<div class="form-group">
 									<label class="col-sm-4 control-label">Filter :</label>
 									<div class="col-sm-8">
-										<input type="checkbox" id="cb_postedpending" checked data-toggle="toggle" data-on="Posting" data-off="Pending" data-onstyle="success" data-offstyle="warning" >
-										<input type="hidden" id="hidpostedpending" value="posted">
+										<input type="checkbox" id="cb_status" checked data-toggle="toggle" data-on="Posting" data-off="Pending" data-onstyle="success" data-offstyle="warning" >
+										<input type="hidden" id="hidstatus" name="search[status]" value="posted">
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 					<table id="table_data_list" class="table table-bordered table-striped">
 						<thead>
 							<tr class="info">
@@ -514,6 +509,7 @@
 								<th>Operator</th>
 								<th>Keterangan</th>
 								<th>Nominal</th>
+								<th>Sisa Utang</th>
 								<th></th>
 							</tr>
 						</thead>
