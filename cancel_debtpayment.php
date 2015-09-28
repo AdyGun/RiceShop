@@ -1,12 +1,12 @@
 <?php include('header.php'); ?>
 
-	<script type="text/javascript">
-		function doValidation(){
+	<script type="text/javascript">		
+		function doValidation(type){
 			$('#input_id, #input_description').blur();
 		}
 		function submitAjaxForm(){
 			$.ajax({                                      
-				url: 'ajax/postingCancel_debt.php',
+				url: 'ajax/postingCancel_debtpayment.php',
 				type: 'post',
 				data: $('#box_input_form form').serialize(),
 				dataType: 'json',         
@@ -46,7 +46,7 @@
 			});
 			/* Form Validator */
 			$('#input_id').blur(function(){
-				validator.check.minLength($(this).parents('.form-group'), 'Kode Utang', 10);
+				validator.check.minLength($(this).parents('.form-group'), 'Kode Pembayaran Utang', 10);
 			});
 			$('#input_description').blur(function(){
 				validator.check.minLength($(this).parents('.form-group'), 'Keterangan', 4);
@@ -71,14 +71,14 @@
 					<div class="box-body">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="col-sm-2 control-label" for="input_id">Kode Utang :</label>
+								<label class="col-sm-3 control-label" for="input_id">Kode Pembayaran Utang :</label>
 								<div class="col-sm-3">
 									<input type="text" autofocus class="form-control" id="input_id" name="input[id]" maxlength="20">
 								</div>
 								<span class="help-block inline"></span>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Keterangan :</label>
+								<label class="col-sm-3 control-label">Keterangan :</label>
 								<div class="col-sm-4">
 									<textarea class="form-control" rows="2" id="input_description" name="input[description]"></textarea>
 								</div>

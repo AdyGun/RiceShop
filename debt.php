@@ -26,6 +26,9 @@
 				success: function(result){
 					helper.removeBoxLoading('#box_input_form');
 					helper.showAlertMessage(result.alert);
+					if (confirm('Apakah anda ingin mencetak transaksi ini?')){
+						window.location.href = 'print_debt.php?id='+content;
+					}
 					refreshDataTable();
 				}
 			});
@@ -120,17 +123,20 @@
 								tabContent += '<td><span class="label label-danger table-autonumeric">'+tabledata[i].debtremain+'</span></td>';
 							}
 							tabContent += '<td>';
+							tabContent += 	'<div class="btn-group">';
+							tabContent += 		'<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">';
+							tabContent += 			'<span class="caret"></span>';
+							tabContent += 		'</button>';
+							tabContent += 		'<ul class="dropdown-menu">';
 							if ($('#hidstatus').val() == 'pending'){
-								tabContent += 	'<div class="btn-group">';
-								tabContent += 		'<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">';
-								tabContent += 			'<span class="caret"></span>';
-								tabContent += 		'</button>';
-								tabContent += 		'<ul class="dropdown-menu">';
 								tabContent += 			'<li class="bg-success"><a href="javascript:void(0)" data-mx-command="update">Ubah</a></li>';
 								tabContent += 			'<li class="bg-danger"><a href="javascript:void(0)" data-mx-command="delete">Hapus</a></li>';
-								tabContent += 		'</ul>';
-								tabContent += 	'</div>';
 							}
+							else{
+								tabContent += 			'<li class="bg-info"><a href="print_debt.php?id='+tabledata[i].debt_id+'" target="_BLANK">Print</a></li>';
+							}
+							tabContent += 		'</ul>';
+							tabContent += 	'</div>';
 							tabContent += '</td>';
 							tabContent += '</tr>';
 							$('#table_data_list tbody').append(tabContent);

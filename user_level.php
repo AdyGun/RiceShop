@@ -1,8 +1,10 @@
 <?php include('header.php'); ?>
 
 	<script type="text/javascript">
-		function doValidation(){
-			$('#input_name').blur();
+		function doValidation(type){
+			if (type == 'full'){
+				$('#input_name').blur();
+			}
 		}
 		function submitAjaxForm(){
 			$.ajax({                                      
@@ -40,7 +42,7 @@
 						return false;
 				}
 				else{
-					doValidation();
+					doValidation('normal');
 					if (!validator.validCheck($('#box_input_form form')))
 						return false;
 				}
@@ -132,7 +134,7 @@
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							doValidation();
+							doValidation('full');
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');

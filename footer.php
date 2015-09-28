@@ -1,7 +1,7 @@
       
 			<footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.9.0
+          <b>Version</b> 0.9.1
         </div>
         <strong>Copyright &copy; 2015 <a href="https://github.com/AdyGun">AdyGun</a>.</strong> All rights reserved.
       </footer>

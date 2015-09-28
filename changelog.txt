@@ -1,4 +1,10 @@
 Change Log:
+v0.9.1
+-add posting cancel feature for Debt Payment Transaction
+-fixed doValidation function BUG when submiting
+-add Print debt transaction page (layout still temporary)
+-add error message on dashboard/index page
+
 v0.9.0
 -new Debt Payment Transaction (CRUD, DataTable, and All form cosmetics working)
 -change data-table search method on all page

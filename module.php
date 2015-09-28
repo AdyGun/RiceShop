@@ -1,8 +1,11 @@
 <?php include('header.php'); ?>
 
 	<script type="text/javascript">
-		function doValidation(){
-			$('#input_name, #input_category, #input_pageurl').blur();
+		function doValidation(type){
+			if (type == 'full'){
+				$('#input_name, #input_pageurl').blur();
+			}
+			$('#input_category').blur();
 		}
 		function submitAjaxForm(){
 			$.ajax({                                      
@@ -41,7 +44,7 @@
 						return false;
 				}
 				else{
-					doValidation();
+					doValidation('normal');
 					if (!validator.validCheck($('#box_input_form form')))
 						return false;
 				}
@@ -148,7 +151,7 @@
 						if (command == 'update'){
 							$('#btnupdate').removeClass('hide');
 							$('#btndelete').addClass('hide');
-							doValidation();
+							doValidation('full');
 						}
 						else if (command == 'delete'){
 							$('#btndelete').removeClass('hide');
@@ -206,7 +209,7 @@
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 					</div>
 				</div><!-- /.box-header -->
-				<form class="form-horizontal" role="form">
+				<form class="form-horizontal">
 					<div class="box-body">
 						<div class="col-lg-6">
 							<div class="form-group">
