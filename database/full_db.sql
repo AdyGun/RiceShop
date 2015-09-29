@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `tdebt` (
   `user_id` varchar(10) NOT NULL,
   `debt_description` text NOT NULL,
   `debt_nominal` int(11) NOT NULL,
-  `debt_capturepath` text NOT NULL,
+  `debt_imageblob` blob NOT NULL,
   `debt_status` varchar(10) NOT NULL,
   `debt_deletedate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -41,6 +41,23 @@ CREATE TABLE IF NOT EXISTS `tdebt` (
 --
 -- Dumping data for table `tdebt`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tdebtpayment`
+--
+
+CREATE TABLE `tdebtpayment` (
+  `debtpayment_id` varchar(20) NOT NULL,
+  `debtpayment_date` date NOT NULL,
+  `debt_id` varchar(20) NOT NULL,
+  `user_id` varchar(10) NOT NULL,
+  `debtpayment_description` text NOT NULL,
+  `debtpayment_nominal` int(11) NOT NULL,
+  `debtpayment_status` varchar(10) NOT NULL,
+  `debtpayment_deletedate` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -116,7 +133,11 @@ INSERT INTO `tmodule` (`module_id`, `module_name`, `module_category`, `module_de
 ('MOD0003', 'User', 'Utility', 'Mengatur Data Pengguna Aplikasi Ini.', 'user.php', 0, 1),
 ('MOD0004', 'Level User', 'Utility', 'Mengatur Hak Akses User Terhadap Suatu Halaman.', 'user_level.php', 0, 1),
 ('MOD0005', 'Supplier', 'Master', 'Mengatur Data Supplier', 'supplier.php', 0, 1),
-('MOD0006', 'Utang', 'Transaksi', 'Transaksi Utang Dari Supplier', 'debt.php', 0, 1);
+('MOD0006', 'Utang', 'Transaksi', 'Transaksi Utang Dari Supplier', 'debt.php', 0, 1),
+('MOD0007', 'Transaksi Utang', 'Batal Posting', 'Untuk Membatalkan Transaksi Utang Yang Pernah Di Tambahkan Sebelumnya', 'cancel_debt.php', 0, 0),
+('MOD0008', 'Pembayaran Utang', 'Transaksi', 'Transaksi Pembayaran Utang', 'debt_payment.php', 0, 1),
+('MOD0009', 'Transaksi Pembayaran Utang', 'Batal Posting', 'Untuk Membatalkan Transaksi Pembayaran Utang Yang Pernah Di Tambahkan Sebelumnya', 'cancel_debtpayment.php', 0, 0),
+('MOD0010', 'Print Transaksi Utang', 'Print', 'Untuk Mencetak / Print Transaksi Utang.', 'print_debt.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -223,6 +244,12 @@ ALTER TABLE `tuser`
 ALTER TABLE `tuser_level`
   ADD PRIMARY KEY (`level_id`);
 
+--
+-- Indexes for table `tdebtpayment`
+--
+ALTER TABLE `tdebtpayment`
+  ADD PRIMARY KEY (`debtpayment_id`);
+	
 --
 -- AUTO_INCREMENT for dumped tables
 --
