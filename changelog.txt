@@ -1,4 +1,7 @@
 Change Log:
+v0.9.2
+-sql: add new Debt table and DebtPayment table
+
 v0.9.1
 -add posting cancel feature for Debt Payment Transaction
 -fixed doValidation function BUG when submiting
